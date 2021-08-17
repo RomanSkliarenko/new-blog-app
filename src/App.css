@@ -1,0 +1,68 @@
+#root {
+  position: relative;
+}
+a {
+  padding: 20px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+}
+
+.user-logout {
+  display: flex;
+}
+
+.user-name {
+  display: inline-block;
+  margin: 20px;
+}
+
+.backdrop {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(192, 187, 187, 0.5);
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.backdrop-form-wrapper {
+  position: relative;
+  border-radius: 10px;
+  padding: 40px;
+  width: 500px;
+  height: 500px;
+  background-color: white;
+}
+
+.backdrop-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.backdrop-form-input {
+  margin-bottom: 20px;
+  height: 50px;
+}
+
+.backdrop-form-add-btn {
+  width: 100px;
+  margin: 0 auto;
+}
+
+.close-backdrop-btn {
+  position: absolute;
+  cursor: pointer;
+  right: 10px;
+  top: 10px;
+}
+
+.backdrop-form-title {
+  margin: 0;
+  text-align: center;
+}
