@@ -7,7 +7,7 @@ import userActions from "../redux/users/users-action";
 export default function Navigation() {
   let history = useHistory();
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.users.currentUser);
+  const currentUser = useSelector((state) => state.users.currentAuthUser);
 
   return (
     <nav>
@@ -66,10 +66,8 @@ export default function Navigation() {
           <button
             type="button"
             onClick={() => {
-              dispatch(userActions.removeUser());
+              dispatch(userActions.removeCurrentAuthUser());
               dispatch(userActions.removeUserToken());
-              localStorage.removeItem("user");
-              localStorage.removeItem("user-token");
               history.push("/");
             }}
           >

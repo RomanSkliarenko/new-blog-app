@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
 import usersActionTypes from "./users-action-types";
 
-const userReducer = (state = null, { type, payload }) => {
+const currentAuthUserReducer = (state = null, { type, payload }) => {
   switch (type) {
-    case usersActionTypes.getUser:
+    case usersActionTypes.getCurrentAuthUser:
       return payload;
-    case usersActionTypes.removeUser:
+    case usersActionTypes.removeCurrentAuthUser:
       return payload;
     default:
       return state;
@@ -31,10 +31,21 @@ const tokenReducer = (state = null, { type, payload }) => {
   }
 };
 
+const selectedUserReducer = (state = null, { type, payload }) => {
+  switch (type) {
+    case usersActionTypes.setSelectedUser:
+      return payload;
+
+    default:
+      return state;
+  }
+};
+
 const usersReducer = combineReducers({
-  currentUser: userReducer,
+  currentAuthUser: currentAuthUserReducer,
   allUsers: allUsersReducer,
   token: tokenReducer,
+  selectedUser: selectedUserReducer,
 });
 
 export default usersReducer;

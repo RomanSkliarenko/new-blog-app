@@ -3,7 +3,12 @@ import axios from "axios";
 import { Formik, Field, Form } from "formik";
 import { useSelector } from "react-redux";
 
-export default function PostsBackdrop({ setNewPostBackdrop, newPostBackdrop }) {
+export default function PostsBackdrop({
+  setNewPostBackdrop, //set flag
+  newPostBackdrop, //flag
+  getAllPosts,
+  getCurrentUserPosts,
+}) {
   const token = useSelector((state) => state.users.token);
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -38,6 +43,8 @@ export default function PostsBackdrop({ setNewPostBackdrop, newPostBackdrop }) {
                 console.log(error);
               });
             setNewPostBackdrop(!newPostBackdrop);
+            await getAllPosts();
+            await getCurrentUserPosts();
           }}
         >
           <Form className="backdrop-form">

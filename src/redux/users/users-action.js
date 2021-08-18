@@ -10,13 +10,13 @@ const removeUserToken = () => ({
   payload: null,
 });
 
-const getUser = (user) => ({
-  type: usersActionTypes.getUser,
+const getCurrentAuthUser = (user) => ({
+  type: usersActionTypes.getCurrentAuthUser,
   payload: user,
 });
 
-const removeUser = () => ({
-  type: usersActionTypes.removeUser,
+const removeCurrentAuthUser = () => ({
+  type: usersActionTypes.removeCurrentAuthUser,
   payload: null,
 });
 
@@ -24,13 +24,18 @@ const getAllUsers = (users) => ({
   type: usersActionTypes.getAllUsers,
   payload: users,
 });
+const setSelectedUser = (user) => ({
+  type: usersActionTypes.setSelectedUser,
+  payload: user,
+});
 
 const userActions = {
   getUserToken,
   removeUserToken,
-  getUser,
-  removeUser,
+  getCurrentAuthUser,
+  removeCurrentAuthUser,
   getAllUsers,
+  setSelectedUser,
 };
 
 export default userActions;

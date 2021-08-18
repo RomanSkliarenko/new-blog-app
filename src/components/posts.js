@@ -6,18 +6,23 @@ import postActions from "../redux/posts/post-actions";
 import PostsBackdrop from "./posts-backdrop";
 
 export default function Posts(props) {
-  const [newPostBackdrop, setNewPostBackdrop] = useState(false);
-  const [showPostBtn, setShowPostBtn] = useState(true);
+  const [newPostBackdrop, setNewPostBackdrop] = useState(false); //flag for backdrop (open or close)
+  const [showPostBtn, setShowPostBtn] = useState(true); //flag for btn name (show my posts / show all posts)
   let history = useHistory();
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.users.token);
+  const token = useSelector((state) => state.users.token); // token
+  const currentUser = useSelector((state) => state.users.currentAuthUser); //current user
+  const currentUserPosts = useSelector((state) => state.posts.currentUserPosts); //current user posts
+  const posts = useSelector((state) => state.posts.allPosts); // all posts
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  const posts = useSelector((state) => state.posts.allPosts);
-  const currentUserPosts = useSelector((state) => state.posts.currentUserPosts);
   useEffect(() => {
-    axios
+    getAllPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const getAllPosts = async () => {
+    await axios
       .get("/posts?limit=0")
       .then(function ({ data }) {
         dispatch(postActions.getAllPosts(data));
@@ -25,44 +30,61 @@ export default function Posts(props) {
       .catch(function (error) {
         console.log(error);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const getCurrentPost = (id) => {
-    axios
+  };
+  const getCurrentPost = async (id) => {
+    await axios
       .get(`/posts/${id}`)
       .then(function ({ data }) {
         dispatch(postActions.getSelectedPost(data));
-        history.push(`${props.match.url}/${id}`);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    history.push(`${props.match.url}/${id}`);
+  };
+  const getCurrentPostComments = (id) => {
+    axios
+      .get(`/comments/post/${id}`)
+      .then(function ({ data }) {
+        if (data.length > 0) {
+          dispatch(postActions.getSelectedPostComments(data));
+        } else {
+          dispatch(postActions.getSelectedPostComments(null));
+        }
       })
       .catch(function (error) {
         console.log(error);
       });
   };
   const getCurrentUserPosts = () => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      const id = JSON.parse(user)._id;
-      const myPosts = posts.filter((post) => post.postedBy === id);
+    if (currentUser) {
+      const { _id } = currentUser;
+      const myPosts = posts.filter((post) => post.postedBy === _id);
       dispatch(postActions.getCurrentUserPosts(myPosts));
       setShowPostBtn(!showPostBtn);
+    } else {
+      alert("Need logined user");
     }
   };
-  const deletePost = (id) => {
-    console.log(id);
-    axios
+  const deletePost = async (id) => {
+    await axios
       .delete(`/posts/${id}`, config)
       .then(function (responce) {
-        console.log(responce);
+        alert("Delete success");
       })
       .catch(function (error) {
         console.log(error);
       });
+    await getAllPosts();
+    await getCurrentUserPosts();
   };
 
   return (
     <>
       {newPostBackdrop ? (
         <PostsBackdrop
+          getCurrentUserPosts={getCurrentUserPosts}
+          getAllPosts={getAllPosts}
           newPostBackdrop={newPostBackdrop}
           setNewPostBackdrop={setNewPostBackdrop}
         />
@@ -83,7 +105,13 @@ export default function Posts(props) {
           ? posts.map((post) => (
               <li key={post._id}>
                 {post.title}
-                <button type="button" onClick={() => getCurrentPost(post._id)}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    getCurrentPost(post._id);
+                    getCurrentPostComments(post._id);
+                  }}
+                >
                   See more
                 </button>
               </li>

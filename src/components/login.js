@@ -7,6 +7,7 @@ import axios from "axios";
 
 export default function Login() {
   const dispatch = useDispatch();
+
   let history = useHistory();
   return (
     <div>
@@ -23,21 +24,22 @@ export default function Login() {
               password,
             })
             .then(function (response) {
-              localStorage.setItem("user-token", response.data.token);
               dispatch(userActions.getUserToken(response.data.token));
+              return response.data.token;
             })
-            .catch(function (error) {
-              console.log(error);
-            });
-          await axios
-            .get("/auth/user", {
-              headers: {
-                Authorization: "Bearer " + localStorage.getItem("user-token"),
-              },
-            })
-            .then(function (response) {
-              localStorage.setItem("user", JSON.stringify(response.data));
-              dispatch(userActions.getUser(response.data));
+            .then((token) => {
+              axios
+                .get("/auth/user", {
+                  headers: {
+                    Authorization: "Bearer " + token,
+                  },
+                })
+                .then(function (response) {
+                  dispatch(userActions.getCurrentAuthUser(response.data));
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
             })
             .catch(function (error) {
               console.log(error);

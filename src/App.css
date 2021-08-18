@@ -66,3 +66,13 @@ nav {
   margin: 0;
   text-align: center;
 }
+
+.like-button {
+  cursor: pointer;
+  height: 32px;
+  margin: 10px;
+  border-radius: 50%;
+  border: 1px solid rgb(180, 180, 180);
+  /* border: none; */
+  outline: none;
+}

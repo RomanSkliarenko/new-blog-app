@@ -13,6 +13,7 @@ import axios from "axios";
 import AllUsers from "./components/all-users";
 import userActions from "./redux/users/users-action";
 import SelectedPost from "./components/selected-post";
+import SelectedUser from "./components/selected-user";
 
 function App() {
   axios.defaults.baseURL = "https://nodejs-test-api-blog.herokuapp.com/api/v1";
@@ -39,7 +40,8 @@ function App() {
         <Route path="/posts" exact component={Posts} />
         <Route path="/posts/:id" component={SelectedPost} />
         <Route path="/profile" component={Profile} />
-        <Route path="/all-users" component={AllUsers} />
+        <Route path="/all-users" exact component={AllUsers} />
+        <Route path="/all-users/:id" component={SelectedUser} />
         <Route component={NotFound} />
       </Switch>
     </>
