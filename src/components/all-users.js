@@ -1,25 +1,16 @@
-import axios from "axios";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import userActions from "../redux/users/users-action";
 import { useHistory } from "react-router-dom";
+import usersOperations from "../redux/users/users-operations";
 
 export default function AllUsers() {
-  let history = useHistory();
-
   const dispatch = useDispatch();
-  const allUsers = useSelector((state) => state.users.allUsers);
   useEffect(() => {
-    axios
-      .get("/users?limit=10")
-      .then(function ({ data }) {
-        dispatch(userActions.getAllUsers(data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    dispatch(usersOperations.getAllUsers());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  let history = useHistory();
+  const allUsers = useSelector((state) => state.users.allUsers);
   return (
     <>
       <h2>All Users page</h2>

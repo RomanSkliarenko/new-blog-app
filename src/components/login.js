@@ -2,8 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
-import userActions from "../redux/users/users-action";
-import axios from "axios";
+import usersOperations from "../redux/users/users-operations";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -17,33 +16,8 @@ export default function Login() {
           email: "",
           password: "",
         }}
-        onSubmit={async ({ email, password }) => {
-          await axios
-            .post("/auth", {
-              email,
-              password,
-            })
-            .then(function (response) {
-              dispatch(userActions.getUserToken(response.data.token));
-              return response.data.token;
-            })
-            .then((token) => {
-              axios
-                .get("/auth/user", {
-                  headers: {
-                    Authorization: "Bearer " + token,
-                  },
-                })
-                .then(function (response) {
-                  dispatch(userActions.getCurrentAuthUser(response.data));
-                })
-                .catch(function (error) {
-                  console.log(error);
-                });
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
+        onSubmit={({ email, password }) => {
+          dispatch(usersOperations.login({ email, password }));
           history.push("/");
         }}
       >

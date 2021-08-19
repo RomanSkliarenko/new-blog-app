@@ -1,38 +1,33 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import postActions from "../redux/posts/post-actions";
-import { useHistory } from "react-router-dom";
-import Comment from "./comment";
+import { useHistory, useParams } from "react-router-dom";
+// import postActions from "../redux/posts/post-actions";
+import postsOperations from "../redux/posts/post-operations";
+import postsApi from "../servises/posts-api";
+import Comments from "./comments";
 
 export default function SelectedPost() {
+  const dispatch = useDispatch();
+  let history = useHistory(); // for back btn
+  let { id } = useParams();
+
+  useEffect(() => {
+    dispatch(postsOperations.getCurrentPost(id));
+    dispatch(postsOperations.getCurrentPostComments(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [newCommentInputFlag, setNewCommentInputFlag] = useState(false);
   const [newCommentInput, setNewCommentInput] = useState("");
-  const dispatch = useDispatch();
-  let history = useHistory();
   const post = useSelector((state) => state.posts.selectedPost);
-  const token = useSelector((state) => state.users.token);
-  const postComments = useSelector((state) => state.posts.selectedPostComments);
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-  const getCurrentPost = async (id) => {
-    await axios
-      .get(`/posts/${id}`)
-      .then(function ({ data }) {
-        dispatch(postActions.getSelectedPost(data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  // const postComments = useSelector((state) => state.posts.selectedPostComments);
+  const { title, likes, fullText, description } = post;
   return (
     <>
       <button
         type="button"
         onClick={() => {
-          dispatch(postActions.getSelectedPost(null));
-          dispatch(postActions.getSelectedPostComments(null));
+          // dispatch(postActions.setSelectedPost(null));
+          // dispatch(postActions.setSelectedPostComments(null));
           history.push("/posts");
         }}
       >
@@ -40,18 +35,18 @@ export default function SelectedPost() {
       </button>
       <ul>
         <li>
-          <h2>{post ? post.title : null}</h2>
+          <h2>{post ? title : null}</h2>
         </li>
         <li>
-          Likes: {post.likes.length}
+          Likes: {post ? likes.length : null}
           <button
             type="button"
             className="like-button"
             onClick={() => {
-              axios
-                .put(`/posts/like/${post._id}`, {}, config)
-                .then(function (responce) {
-                  getCurrentPost(post._id);
+              postsApi
+                .fetchPostLike(id)
+                .then(function (_) {
+                  dispatch(postsOperations.getCurrentPost(id));
                 })
                 .catch(function (error) {
                   console.log(error);
@@ -62,16 +57,16 @@ export default function SelectedPost() {
           </button>
         </li>
         <li>
-          <p>Description: {post.description}</p>
+          <p>Description: {post ? description : null}</p>
         </li>
         <li>
-          <p>Text: {post.fullText}</p>
+          <p>Text: {post ? fullText : null}</p>
         </li>
         <li>
           <p>Comments:</p>
           <button
             type="button"
-            onClick={(event) => {
+            onClick={(_) => {
               setNewCommentInputFlag(!newCommentInputFlag);
             }}
           >
@@ -90,17 +85,10 @@ export default function SelectedPost() {
               <button
                 type="button"
                 onClick={() => {
-                  axios
-                    .post(
-                      `/comments/post/${post._id}`,
-                      {
-                        text: newCommentInput,
-                        followedCommentID: null,
-                      },
-                      config
-                    )
-                    .then(function ({ data }) {
-                      dispatch(postActions.addCommentToSelectedPost(data));
+                  postsApi
+                    .fetchAddCommentToSelectedPost(id, newCommentInput)
+                    .then(function (data) {
+                      dispatch(postsOperations.getCurrentPostComments(id));
                       setNewCommentInput("");
                       setNewCommentInputFlag(false);
                     })
@@ -114,11 +102,7 @@ export default function SelectedPost() {
             </>
           ) : null}
           <ul>
-            {postComments
-              ? postComments.map((comment) => {
-                  return <Comment key={comment._id} comment={comment} />;
-                })
-              : null}
+            <Comments />
           </ul>
         </li>
       </ul>

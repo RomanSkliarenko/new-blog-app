@@ -66,8 +66,9 @@ export default function Navigation() {
           <button
             type="button"
             onClick={() => {
-              dispatch(userActions.removeCurrentAuthUser());
-              dispatch(userActions.removeUserToken());
+              dispatch(userActions.setCurrentAuthUser(null));
+              dispatch(userActions.setUserToken(null));
+              localStorage.removeItem("token");
               history.push("/");
             }}
           >

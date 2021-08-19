@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import "./App.css";
 import Home from "./components/home";
 import Login from "./components/login";
@@ -11,22 +11,22 @@ import Profile from "./components/profile";
 import SignUp from "./components/signUp";
 import axios from "axios";
 import AllUsers from "./components/all-users";
-import userActions from "./redux/users/users-action";
+// import userActions from "./redux/users/users-action";
 import SelectedPost from "./components/selected-post";
 import SelectedUser from "./components/selected-user";
 
 function App() {
   axios.defaults.baseURL = "https://nodejs-test-api-blog.herokuapp.com/api/v1";
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    const token = localStorage.getItem("user-token");
-    if (user) {
-      dispatch(userActions.getUser(JSON.parse(user)));
-    }
-    if (token) {
-      dispatch(userActions.getUserToken(token));
-    }
+    // const user = localStorage.getItem("user");
+    // const token = localStorage.getItem("user-token");
+    // if (user) {
+    //   dispatch(userActions.getUser(JSON.parse(user)));
+    // }
+    // if (token) {
+    //   dispatch(userActions.getUserToken(token));
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

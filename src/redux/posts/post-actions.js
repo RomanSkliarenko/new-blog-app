@@ -1,37 +1,16 @@
-import postActionTypes from "./post-action-types";
+import { createAction } from "@reduxjs/toolkit";
 
-const getAllPosts = (posts) => ({
-  type: postActionTypes.getAllPosts,
-  payload: posts,
-});
-const getSelectedPost = (post) => ({
-  type: postActionTypes.getSelectedPost,
-  payload: post,
-});
-const getSelectedPostComments = (comments) => ({
-  type: postActionTypes.getSelectedPostComments,
-  payload: comments,
-});
-const addCommentToSelectedPost = (comment) => ({
-  type: postActionTypes.addCommentToSelectedPost,
-  payload: comment,
-});
-const deleteCommentFromSelectedPost = (id) => ({
-  type: postActionTypes.deleteCommentFromSelectedPost,
-  payload: id,
-});
-const getCurrentUserPosts = (post) => ({
-  type: postActionTypes.getCurrentUserPosts,
-  payload: post,
-});
-//getSelectedPostComments
+const getAllPosts = createAction("posts/get-all-posts");
+const setCurrentUserPosts = createAction("posts/set-current-user-posts");
+const setSelectedPost = createAction("posts/set-selected-post");
+const setSelectedPostComments = createAction(
+  "posts/set-selected-post-comments"
+);
 
 const postActions = {
   getAllPosts,
-  getSelectedPost,
-  getSelectedPostComments,
-  addCommentToSelectedPost,
-  deleteCommentFromSelectedPost,
-  getCurrentUserPosts,
+  setSelectedPost,
+  setSelectedPostComments,
+  setCurrentUserPosts,
 };
 export default postActions;

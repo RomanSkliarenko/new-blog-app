@@ -1,18 +1,13 @@
 import React from "react";
-import axios from "axios";
 import { Formik, Field, Form } from "formik";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import postsOperations from "../redux/posts/post-operations";
 
 export default function PostsBackdrop({
   setNewPostBackdrop, //set flag
   newPostBackdrop, //flag
-  getAllPosts,
-  getCurrentUserPosts,
 }) {
-  const token = useSelector((state) => state.users.token);
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
+  const dispatch = useDispatch();
 
   return (
     <div className="backdrop">
@@ -32,19 +27,10 @@ export default function PostsBackdrop({
             description: "",
           }}
           onSubmit={async ({ title, fullText, description }) => {
-            await axios
-              .post("/posts", { title, fullText, description }, config)
-              .then(function (response) {
-                alert("success");
-                console.log(response);
-              })
-              .catch(function (error) {
-                alert("fail");
-                console.log(error);
-              });
+            dispatch(
+              postsOperations.createNewPost({ title, fullText, description })
+            );
             setNewPostBackdrop(!newPostBackdrop);
-            await getAllPosts();
-            await getCurrentUserPosts();
           }}
         >
           <Form className="backdrop-form">

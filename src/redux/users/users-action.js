@@ -1,39 +1,13 @@
-import usersActionTypes from "./users-action-types";
+import { createAction } from "@reduxjs/toolkit";
 
-const getUserToken = (token) => ({
-  type: usersActionTypes.getUserToken,
-  payload: token,
-});
-
-const removeUserToken = () => ({
-  type: usersActionTypes.removeUserToken,
-  payload: null,
-});
-
-const getCurrentAuthUser = (user) => ({
-  type: usersActionTypes.getCurrentAuthUser,
-  payload: user,
-});
-
-const removeCurrentAuthUser = () => ({
-  type: usersActionTypes.removeCurrentAuthUser,
-  payload: null,
-});
-
-const getAllUsers = (users) => ({
-  type: usersActionTypes.getAllUsers,
-  payload: users,
-});
-const setSelectedUser = (user) => ({
-  type: usersActionTypes.setSelectedUser,
-  payload: user,
-});
+const setUserToken = createAction("users/set-token");
+const setCurrentAuthUser = createAction("users/set-current-auth-user");
+const getAllUsers = createAction("users/get-all-users");
+const setSelectedUser = createAction("users/set-selected-user");
 
 const userActions = {
-  getUserToken,
-  removeUserToken,
-  getCurrentAuthUser,
-  removeCurrentAuthUser,
+  setUserToken,
+  setCurrentAuthUser,
   getAllUsers,
   setSelectedUser,
 };

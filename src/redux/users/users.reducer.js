@@ -1,45 +1,22 @@
 import { combineReducers } from "redux";
-import usersActionTypes from "./users-action-types";
+import { createReducer } from "@reduxjs/toolkit";
+import usersAction from "./users-action";
 
-const currentAuthUserReducer = (state = null, { type, payload }) => {
-  switch (type) {
-    case usersActionTypes.getCurrentAuthUser:
-      return payload;
-    case usersActionTypes.removeCurrentAuthUser:
-      return payload;
-    default:
-      return state;
-  }
-};
-const allUsersReducer = (state = null, { type, payload }) => {
-  switch (type) {
-    case usersActionTypes.getAllUsers:
-      return payload;
-    default:
-      return state;
-  }
-};
+const currentAuthUserReducer = createReducer(null, {
+  [usersAction.setCurrentAuthUser]: (_, { payload }) => payload,
+});
 
-const tokenReducer = (state = null, { type, payload }) => {
-  switch (type) {
-    case usersActionTypes.getUserToken:
-      return payload;
-    case usersActionTypes.removeUserToken:
-      return payload;
-    default:
-      return state;
-  }
-};
+const allUsersReducer = createReducer(null, {
+  [usersAction.getAllUsers]: (_, { payload }) => payload,
+});
 
-const selectedUserReducer = (state = null, { type, payload }) => {
-  switch (type) {
-    case usersActionTypes.setSelectedUser:
-      return payload;
+const tokenReducer = createReducer(null, {
+  [usersAction.setUserToken]: (_, { payload }) => payload,
+});
 
-    default:
-      return state;
-  }
-};
+const selectedUserReducer = createReducer(null, {
+  [usersAction.setSelectedUser]: (_, { payload }) => payload,
+});
 
 const usersReducer = combineReducers({
   currentAuthUser: currentAuthUserReducer,

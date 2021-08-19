@@ -1,25 +1,16 @@
 import React, { useEffect } from "react";
-import axios from "axios";
-
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import userActions from "../redux/users/users-action";
+import usersOperations from "../redux/users/users-operations";
 
 export default function SelectedUser(props) {
   let history = useHistory();
   const dispatch = useDispatch();
   useEffect(() => {
-    axios
-      .get(`/users/${props.match.params.id}`)
-      .then(function ({ data }) {
-        dispatch(userActions.setSelectedUser(data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    dispatch(usersOperations.setSelectedUser(props.match.params.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   const selectedUser = useSelector((state) => state.users.selectedUser);
   return (
     <div>
@@ -27,7 +18,6 @@ export default function SelectedUser(props) {
         type="button"
         onClick={() => {
           dispatch(userActions.setSelectedUser(null));
-
           history.push("/all-users");
         }}
       >

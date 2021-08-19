@@ -1,54 +1,42 @@
 import { combineReducers } from "redux";
-import postActionTypes from "./post-action-types";
+import { createReducer } from "@reduxjs/toolkit";
+import postAction from "./post-actions";
 
-const allPostsReducer = (state = [], { type, payload }) => {
-  switch (type) {
-    case postActionTypes.getAllPosts:
-      return payload;
-
-    default:
-      return state;
-  }
+const allPostsReducer = createReducer([], {
+  [postAction.getAllPosts]: (_, { payload }) => payload,
+});
+const initialSelPosRedu = {
+  likes: [1, 2, 3],
+  _id: "1",
+  fullText: "1",
+  title: "1",
+  description: "1",
+  followedCommentID: null,
+  dateCreated: "1",
+  postedBy: "1",
 };
+const selectedPostReducer = createReducer(initialSelPosRedu, {
+  [postAction.setSelectedPost]: (_, { payload }) => payload,
+});
 
-const selectedPostReducer = (state = null, { type, payload }) => {
-  switch (type) {
-    case postActionTypes.getSelectedPost:
-      return payload;
-    case postActionTypes.removeSelectedPost:
-      return payload;
-
-    default:
-      return state;
-  }
-};
-
-const currentUserPostsReducer = (state = null, { type, payload }) => {
-  switch (type) {
-    case postActionTypes.getCurrentUserPosts:
-      return payload;
-
-    default:
-      return state;
-  }
-};
-
-const selectedPostCommentsReducer = (state = null, { type, payload }) => {
-  switch (type) {
-    case postActionTypes.getSelectedPostComments:
-      return payload;
-
-    case postActionTypes.addCommentToSelectedPost:
-      return [...state, payload];
-
-    case postActionTypes.deleteCommentFromSelectedPost:
-      const newState = state.filter((comment) => comment._id !== payload);
-      return newState;
-
-    default:
-      return state;
-  }
-};
+const currentUserPostsReducer = createReducer(null, {
+  [postAction.setCurrentUserPosts]: (_, { payload }) => payload,
+});
+const initialSelPosCommRedu = [
+  {
+    likes: [1, 2, 3],
+    _id: "1",
+    text: "1",
+    followedCommentID: null,
+    dateCreated: "1",
+    commentedBy: "1",
+    postID: "1",
+    __v: 1,
+  },
+];
+const selectedPostCommentsReducer = createReducer(initialSelPosCommRedu, {
+  [postAction.setSelectedPostComments]: (_, { payload }) => payload,
+});
 
 const postsReducer = combineReducers({
   allPosts: allPostsReducer,
