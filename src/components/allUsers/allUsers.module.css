@@ -53,6 +53,7 @@
 .usersListItem:hover {
   transform: scale(1.1);
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.795);
+  border: 2px solid green;
 }
 
 .itemBtn {

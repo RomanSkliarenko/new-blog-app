@@ -31,7 +31,12 @@ export default function Posts(props) {
     postsApi
       .fetchAllPosts()
       .then(function ({ data }) {
+        alert("Note added successfully");
         setPosts(data);
+        window.scrollTo({
+          top: 1000,
+          behavior: "smooth",
+        });
       })
       .catch(function (error) {
         console.log(error);
@@ -84,7 +89,7 @@ export default function Posts(props) {
                     : `${style.currentUserPostsItem} ${style.postsItem}`
                 }
               >
-                {post.title}
+                <h3>{post.title}</h3>
                 <button
                   className={style.postsItemBtn}
                   type="button"

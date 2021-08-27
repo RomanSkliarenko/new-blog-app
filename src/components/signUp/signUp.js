@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import usersOperations from "../../redux/users/users-operations";
 import { useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
+import style from "./signUp.module.css";
 import axios from "axios";
 
 export default function SignUp() {
@@ -10,8 +11,8 @@ export default function SignUp() {
   let history = useHistory();
 
   return (
-    <div>
-      <h2>Sign Up</h2>
+    <div className={style.signUpWrapper}>
+      <h2 className={style.signUpTitle}>Sign Up</h2>
       <Formik
         initialValues={{
           name: "",
@@ -35,19 +36,31 @@ export default function SignUp() {
         }}
       >
         <Form>
-          <label htmlFor="name">Name</label>
-          <Field id="name" name="name" placeholder="Jane" />
-          <label htmlFor="password">Password</label>
-          <Field id="password" name="password" />
-
-          <label htmlFor="email">Email</label>
+          <label htmlFor="name">Name: </label>
+          <Field
+            id="name"
+            name="name"
+            placeholder="Jane"
+            className={style.signUpInput}
+          />
+          <label htmlFor="email">Email: </label>
           <Field
             id="email"
             name="email"
             placeholder="jane@acme.com"
             type="email"
+            className={style.signUpInput}
           />
-          <button type="submit">Submit</button>
+          <label htmlFor="password">Password: </label>
+          <Field
+            id="password"
+            name="password"
+            className={style.signUpInput}
+            placeholder="**************"
+          />
+          <button type="submit" className={style.sectionNavBtn}>
+            Submit
+          </button>
         </Form>
       </Formik>
     </div>

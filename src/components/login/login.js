@@ -3,14 +3,15 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import usersOperations from "../../redux/users/users-operations";
+import style from "./login.module.css";
 
 export default function Login() {
   const dispatch = useDispatch();
 
   let history = useHistory();
   return (
-    <div>
-      <h2>Login</h2>
+    <div className={style.loginWrapper}>
+      <h2 className={style.loginTitle}>Login</h2>
       <Formik
         initialValues={{
           email: "",
@@ -22,16 +23,26 @@ export default function Login() {
         }}
       >
         <Form>
-          <label htmlFor="password">Password</label>
-          <Field id="password" name="password" />
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Email: </label>
           <Field
             id="email"
             name="email"
             placeholder="jane@acme.com"
             type="email"
+            className={style.loginInput}
+            autoFocus={true}
           />
-          <button type="submit">Submit</button>
+          <label htmlFor="password">Password: </label>
+          <Field
+            id="password"
+            name="password"
+            placeholder="************"
+            className={style.loginInput}
+          />
+
+          <button type="submit" className={style.sectionNavBtn}>
+            Submit
+          </button>
         </Form>
       </Formik>
     </div>

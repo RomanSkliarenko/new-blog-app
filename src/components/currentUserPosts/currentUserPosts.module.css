@@ -38,6 +38,7 @@
 }
 
 .postsItem {
+  overflow: hidden;
   padding: 15px 10px 15px 10px;
   margin: 10px;
   display: flex;

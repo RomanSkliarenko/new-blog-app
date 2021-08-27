@@ -13,9 +13,7 @@ const linkStyles = {
 
   active: {
     fontWeight: 800,
-    // textDecoration: "underline",
-    // borderLeft: "1px solid rgb(121, 121, 121)",
-    // borderRight: "1px solid rgb(121, 121, 121)",
+    borderTop: "4px solid green",
     fontSize: 27,
   },
 };

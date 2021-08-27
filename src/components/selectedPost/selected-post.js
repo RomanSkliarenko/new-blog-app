@@ -31,7 +31,22 @@ export default function SelectedPost() {
     postsApi
       .fetchCurrentPostComments(id)
       .then(function (data) {
-        setCurrentPostComments(data);
+        if (data.length !== 0) {
+          setCurrentPostComments(data);
+        } else {
+          setCurrentPostComments([
+            {
+              _id: "1",
+              commentedBy: "1",
+              dateCreated: "1",
+              followedCommentID: null,
+              likes: [],
+              postID: "1",
+              text: "No comments yet",
+              __v: 1,
+            },
+          ]);
+        }
       })
       .catch(function (error) {
         console.log(error);
