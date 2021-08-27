@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/new-ficus-app/static/css/main.709a1bad.chunk.css",
+    "main.js": "/new-ficus-app/static/js/main.f1869be1.chunk.js",
+    "main.js.map": "/new-ficus-app/static/js/main.f1869be1.chunk.js.map",
+    "runtime-main.js": "/new-ficus-app/static/js/runtime-main.53cb318d.js",
+    "runtime-main.js.map": "/new-ficus-app/static/js/runtime-main.53cb318d.js.map",
+    "static/css/2.bc922b9c.chunk.css": "/new-ficus-app/static/css/2.bc922b9c.chunk.css",
+    "static/js/2.3728092a.chunk.js": "/new-ficus-app/static/js/2.3728092a.chunk.js",
+    "static/js/2.3728092a.chunk.js.map": "/new-ficus-app/static/js/2.3728092a.chunk.js.map",
+    "index.html": "/new-ficus-app/index.html",
+    "static/css/2.bc922b9c.chunk.css.map": "/new-ficus-app/static/css/2.bc922b9c.chunk.css.map",
+    "static/css/main.709a1bad.chunk.css.map": "/new-ficus-app/static/css/main.709a1bad.chunk.css.map",
+    "static/js/2.3728092a.chunk.js.LICENSE.txt": "/new-ficus-app/static/js/2.3728092a.chunk.js.LICENSE.txt",
+    "static/media/hello.e200612c.gif": "/new-ficus-app/static/media/hello.e200612c.gif",
+    "static/media/user-default-avatar.10691648.png": "/new-ficus-app/static/media/user-default-avatar.10691648.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.53cb318d.js",
+    "static/css/2.bc922b9c.chunk.css",
+    "static/js/2.3728092a.chunk.js",
+    "static/css/main.709a1bad.chunk.css",
+    "static/js/main.f1869be1.chunk.js"
+  ]
+}
