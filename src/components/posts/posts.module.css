@@ -1,0 +1,82 @@
+.postsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.pageTitle {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.sectionNavBtnContainer {
+  display: flex;
+  margin: 0 auto;
+}
+
+.sectionNavBtn {
+  font-weight: 500;
+  height: 30px;
+  background: transparent;
+  outline: none;
+  margin: 5px;
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.sectionNavBtn:hover {
+  transform: scale(1.1);
+  color: white;
+  background-color: black;
+}
+
+.postsList {
+  padding: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.postsItem {
+  padding: 15px 10px 15px 10px;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 220px;
+  height: 220px;
+  list-style: none;
+  border: 1px solid rgb(131, 131, 131);
+  box-shadow: 4px 4px 4px rgba(80, 80, 80, 0.425);
+  border-radius: 30px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.postsItem:hover {
+  transform: scale(1.1);
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.795);
+}
+
+.postsItemBtn {
+  text-transform: uppercase;
+  font-size: 14px;
+  display: block;
+  width: 70px;
+  height: 30px;
+  margin: 0 auto;
+  background: transparent;
+  outline: none;
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.currentUserPostsItem {
+    background-color: rgba(148, 148, 148, 0.5);
+}
+
+.postsItemBtn:hover {
+    transform: scale(1.1);
+    color: white;
+    background-color: black;
+}

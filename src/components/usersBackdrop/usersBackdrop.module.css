@@ -1,0 +1,84 @@
+.backdrop {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(192, 187, 187, 0.5);
+}
+
+.backdropCloseBtn {
+  position: absolute;
+  cursor: pointer;
+  right: 10px;
+  top: 10px;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  outline: none;
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.backdropCloseBtn:hover {
+  transform: scale(1.2);
+  color: white;
+  background-color: black;
+  border: 1px solid green;
+}
+
+.backdropFormTitle {
+  text-transform: uppercase;
+  margin: 0;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.backdropFormWrapper {
+  position: relative;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 40px;
+  width: 500px;
+  background-color: white;
+  box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.795);
+}
+
+.backdropForm {
+  display: flex;
+  flex-direction: column;
+}
+label {
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.backdropInput {
+  font-style: italic;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #000;
+  margin-bottom: 10px;
+  height: 40px;
+}
+
+.backdropFormAddBtn {
+  width: 70px;
+  height: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+  background: transparent;
+  outline: none;
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.backdropFormAddBtn:hover {
+  transform: scale(1.2);
+  color: white;
+  background-color: black;
+  border: 1px solid green;
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import postsOperations from "../redux/posts/post-operations";
+import postsOperations from "../../redux/posts/post-operations";
 
 export default function Comments() {
   const dispatch = useDispatch();

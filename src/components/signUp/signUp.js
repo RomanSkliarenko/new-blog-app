@@ -1,8 +1,14 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import usersOperations from "../../redux/users/users-operations";
+import { useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import axios from "axios";
 
 export default function SignUp() {
+  const dispatch = useDispatch();
+  let history = useHistory();
+
   return (
     <div>
       <h2>Sign Up</h2>
@@ -12,15 +18,16 @@ export default function SignUp() {
           email: "",
           password: "",
         }}
-        onSubmit={async (values) => {
+        onSubmit={async ({ email, password, name }) => {
           axios
             .post("/users", {
-              email: values.email,
-              password: values.password,
-              name: values.name,
+              email,
+              password,
+              name,
             })
-            .then(function (response) {
-              console.log(response);
+            .then(function (_) {
+              dispatch(usersOperations.login({ email, password }));
+              history.push("/");
             })
             .catch(function (error) {
               console.log(error);

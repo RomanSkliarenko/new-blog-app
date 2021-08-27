@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
-import usersOperations from "../redux/users/users-operations";
+import usersOperations from "../../redux/users/users-operations";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ export default function Login() {
           email: "",
           password: "",
         }}
-        onSubmit={({ email, password }) => {
+        onSubmit={async ({ email, password }) => {
           dispatch(usersOperations.login({ email, password }));
           history.push("/");
         }}

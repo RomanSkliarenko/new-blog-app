@@ -1,0 +1,53 @@
+.profileSectionContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileNavBtnContainer {
+  padding: 20px;
+  padding-top: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.profileName {
+  text-align: center;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.userDetailsWrapper {
+  width: 60vw;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding-top: 50px;
+}
+
+.sectionNavBtn {
+  margin: 10px;
+  font-weight: 500;
+  height: 30px;
+  background: transparent;
+  outline: none;
+  border: 1px solid black;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.sectionNavBtn:hover {
+  transform: scale(1.1);
+  color: white;
+  background-color: black;
+  border: 1px solid green;
+}
+
+.userDetailsItem {
+  list-style: none;
+  font-size: 24px;
+}
+
+.userDetailsItemTitle {
+  font-weight: 500;
+}

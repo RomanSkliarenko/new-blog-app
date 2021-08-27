@@ -1,6 +1,11 @@
 #root {
   position: relative;
 }
+.spinner {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+}
 a {
   padding: 20px;
 }
