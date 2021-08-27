@@ -8,8 +8,10 @@ import userAvatr from "../../images/user-default-avatar.png";
 import style from "./profile.module.css";
 
 export default function Profile() {
+  const dispatch = useDispatch();
+  let history = useHistory();
   const [editUserFlag, setEditUserFlag] = useState(false);
-  const [currentUser, setcurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
   const [currentUserAvatar, setcurrentUserAvatar] = useState(null);
   const currentAuthUser = useSelector((state) => state.users.currentAuthUser);
   const avatarInput = useRef();
@@ -21,10 +23,9 @@ export default function Profile() {
   const fetchCurrentAuthUser = () => {
     usersApi
       .fetchSelectedUser(currentAuthUser._id)
-      .then((data) => setcurrentUser(data));
+      .then((data) => setCurrentUser(data));
   };
-  const dispatch = useDispatch();
-  let history = useHistory();
+
   return (
     <section className={style.profileSectionContainer}>
       <div className={style.profileName}>
@@ -95,7 +96,7 @@ export default function Profile() {
           <li className={style.userDetailsItem}>
             {currentUser?.name ? (
               <p>
-                <span className={style.userDetailsItemTitle}>User name :</span>
+                <span className={style.userDetailsItemTitle}>User name : </span>
                 {currentUser.name}
               </p>
             ) : null}

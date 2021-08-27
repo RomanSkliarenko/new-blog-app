@@ -49,7 +49,7 @@ export default function SelectedPost() {
         }
       })
       .catch(function (error) {
-        console.log(error);
+        alert(error);
       });
   };
   useEffect(() => {
@@ -176,8 +176,7 @@ export default function SelectedPost() {
                           getCurrentPostComments();
                         })
                         .catch(function (error) {
-                          console.log(error);
-                          alert("Oooops :(");
+                          alert(error.message);
                         });
                     }}
                   >
@@ -244,7 +243,6 @@ export default function SelectedPost() {
                               className={style.sectionNavBtn}
                               type="button"
                               onClick={() => {
-                                setEditCommentInputFlag(!editCommentInputFlag);
                                 if (editCommentInput !== "") {
                                   postsApi
                                     .fetchEditSelectedPostComment(
@@ -259,6 +257,7 @@ export default function SelectedPost() {
                                       console.log(error);
                                     });
                                 }
+                                setEditCommentInputFlag(!editCommentInputFlag);
                               }}
                             >
                               EDIT

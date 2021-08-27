@@ -19,6 +19,7 @@ function App() {
       <Navigation />
       <Switch>
         <Route path="/" exact component={Home} />
+        <Route path="/new-ficus-app" exact component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/sign-up" component={SignUp} />
         <Route path="/posts" exact component={Posts} />

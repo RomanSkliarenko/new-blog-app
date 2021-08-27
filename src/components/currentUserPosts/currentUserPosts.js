@@ -14,29 +14,24 @@ export default function CurrentUserPosts(props) {
   const [newPostBackdrop, setNewPostBackdrop] = useState(false); //flag for backdrop (open or close)
   const { _id } = useSelector((state) => state.users.currentAuthUser); //current user
 
-  const addCurrentAuthUserPost = (post) => {
-    dispatch(postsOperations.createNewPost(post));
+  const getCurrentUserPosts = () => {
     postsApi
       .fetchAllPosts()
       .then(function ({ data }) {
         setPosts(data.filter((post) => post.postedBy === _id));
       })
       .catch(function (error) {
-        console.log(error);
+        alert(error);
       });
+  };
+  const addCurrentAuthUserPost = (post) => {
+    dispatch(postsOperations.createNewPost(post));
+    getCurrentUserPosts();
     setNewPostBackdrop(!newPostBackdrop);
   };
 
   useEffect(() => {
-    postsApi
-      .fetchAllPosts()
-      .then(function ({ data }) {
-        setPosts(data.filter((post) => post.postedBy === _id));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
+    getCurrentUserPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -81,20 +76,9 @@ export default function CurrentUserPosts(props) {
                     className={style.postsItemBtn}
                     type="button"
                     onClick={() => {
-                      dispatch(postsOperations.deletePost(post._id)).then(
-                        (_) => {
-                          postsApi
-                            .fetchAllPosts()
-                            .then(function ({ data }) {
-                              setPosts(
-                                data.filter((post) => post.postedBy === _id)
-                              );
-                            })
-                            .catch(function (error) {
-                              console.log(error);
-                            });
-                        }
-                      );
+                      postsApi
+                        .fetchDeletePost(post._id)
+                        .then(() => getCurrentUserPosts());
                     }}
                   >
                     Delete

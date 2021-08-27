@@ -11,7 +11,7 @@ export default function PostsBackdrop({
 }) {
   const [edit, setEdit] = useState(false);
   useEffect(() => {
-    setEdit(editOrCreate);
+    setEdit(editOrCreate); //flag for backdrop title
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

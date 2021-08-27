@@ -14,7 +14,7 @@ import {
 
 // import logger from "redux-logger";
 import storage from "redux-persist/lib/storage";
-import postsReducer from "./posts/post-reducers";
+// import postsReducer from "./posts/post-reducers";
 import usersReducer from "./users/users.reducer";
 
 const rootPersistConfig = {
@@ -24,13 +24,12 @@ const rootPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  posts: postsReducer,
+  // posts: postsReducer,
   users: usersReducer,
 });
 
 const persistedRootReducer = persistReducer(rootPersistConfig, rootReducer);
 
-// const store = createStore(persistedRootReducer, composeWithDevTools());
 const store = configureStore({
   reducer: persistedRootReducer,
   middleware: (getDefaultMiddleware) =>

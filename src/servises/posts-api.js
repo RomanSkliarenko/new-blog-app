@@ -1,10 +1,6 @@
-import axios from "axios";
 import axiosApiInstance from "../servises/interseptor";
-
-axios.defaults.baseURL = "https://nodejs-test-api-blog.herokuapp.com/api/v1";
-// const config = {
-//   headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-// };
+axiosApiInstance.defaults.baseURL =
+  "https://nodejs-test-api-blog.herokuapp.com/api/v1";
 
 const fetchAllPosts = async () => {
   const { data } = await axiosApiInstance.get("/posts?limit=0");

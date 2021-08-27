@@ -9,30 +9,7 @@ const userToken = {
     axios.defaults.headers.common.Authorization = ``;
   },
 };
-const getAllUsers = () => (dispatch) => {
-  dispatch(userActions.getAllUsersRequest());
-  usersApi
-    .fetchUsers()
-    .then(function (data) {
-      dispatch(userActions.getAllUsersSuccess(data));
-    })
-    .catch(function (error) {
-      dispatch(userActions.getAllUsersError());
-      console.log(error);
-    });
-};
-const setSelectedUser = (id) => (dispatch) => {
-  dispatch(userActions.setSelectedUserRequest());
-  usersApi
-    .fetchSelectedUser(id)
-    .then(function (data) {
-      dispatch(userActions.setSelectedUserSuccess(data));
-    })
-    .catch(function (error) {
-      dispatch(userActions.setSelectedUserError());
-      console.log(error);
-    });
-};
+
 const login = (user) => async (dispatch) => {
   dispatch(userActions.setUserTokenRequest());
   await usersApi
@@ -67,7 +44,5 @@ const logout = () => async (dispatch) => {
 const usersOperations = {
   login,
   logout,
-  getAllUsers,
-  setSelectedUser,
 };
 export default usersOperations;

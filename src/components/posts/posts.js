@@ -21,7 +21,7 @@ export default function Posts(props) {
         setPosts(data);
       })
       .catch(function (error) {
-        console.log(error);
+        alert(error.message);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
