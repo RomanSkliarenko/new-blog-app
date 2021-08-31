@@ -6,6 +6,19 @@ import Loader from "react-loader-spinner";
 import PostsBackdrop from "../postsBackdrop/posts-backdrop";
 import style from "./selected-post.module.css";
 
+const NO_COMMENTS_PLACEHOLDER = [
+  {
+    _id: "1",
+    commentedBy: "1",
+    dateCreated: "1",
+    followedCommentID: null,
+    likes: [],
+    postID: "1",
+    text: "No comments yet",
+    __v: 1,
+  },
+];
+
 export default function SelectedPost() {
   const [newCommentInputFlag, setNewCommentInputFlag] = useState(false);
   const [newCommentInput, setNewCommentInput] = useState("");
@@ -15,8 +28,9 @@ export default function SelectedPost() {
   let history = useHistory(); // for back btn
   const [currentPost, setCurrentPost] = useState(null);
   const [currentPostComments, setCurrentPostComments] = useState(null);
-  const _id = useSelector((state) => state.users.currentAuthUser._id); //current user
+  const _id = useSelector((state) => state.user.user._id); //current user
   let { id } = useParams();
+
   const getCurrentPost = () => {
     postsApi
       .fetchCurrentPost(id)
@@ -24,32 +38,19 @@ export default function SelectedPost() {
         setCurrentPost(data);
       })
       .catch(function (error) {
+        alert(error.response.data.error);
         console.log(error);
       });
   };
+
   const getCurrentPostComments = () => {
     postsApi
       .fetchCurrentPostComments(id)
       .then(function (data) {
-        if (data.length !== 0) {
-          setCurrentPostComments(data);
-        } else {
-          setCurrentPostComments([
-            {
-              _id: "1",
-              commentedBy: "1",
-              dateCreated: "1",
-              followedCommentID: null,
-              likes: [],
-              postID: "1",
-              text: "No comments yet",
-              __v: 1,
-            },
-          ]);
-        }
+        setCurrentPostComments(data.length ? data : NO_COMMENTS_PLACEHOLDER);
       })
       .catch(function (error) {
-        alert(error);
+        alert(error.response.data.error);
       });
   };
   useEffect(() => {
@@ -68,6 +69,7 @@ export default function SelectedPost() {
         getCurrentPostComments();
       })
       .catch(function (error) {
+        alert(error.response.data.error);
         console.log(error);
       });
     setNewPostBackdrop(!newPostBackdrop);
@@ -132,6 +134,7 @@ export default function SelectedPost() {
                         getCurrentPost();
                       })
                       .catch(function (error) {
+                        alert(error.response.data.error);
                         console.log(error);
                       });
                   } else {
@@ -176,7 +179,7 @@ export default function SelectedPost() {
                           getCurrentPostComments();
                         })
                         .catch(function (error) {
-                          alert(error.message);
+                          alert(error.response.data.error);
                         });
                     }}
                   >
@@ -201,6 +204,7 @@ export default function SelectedPost() {
                               getCurrentPostComments();
                             })
                             .catch(function (error) {
+                              alert(error.response.data.error);
                               console.log(error);
                             });
                         } else {
@@ -223,6 +227,7 @@ export default function SelectedPost() {
                                 getCurrentPostComments();
                               })
                               .catch(function (error) {
+                                alert(error.response.data.error);
                                 console.log(error);
                               });
                           }}
@@ -253,7 +258,7 @@ export default function SelectedPost() {
                                       getCurrentPostComments();
                                     })
                                     .catch(function (error) {
-                                      alert("Oooops :(");
+                                      alert(error.response.data.error);
                                       console.log(error);
                                     });
                                 }

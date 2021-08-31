@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import PostsBackdrop from "../postsBackdrop/posts-backdrop";
 import Loader from "react-loader-spinner";
@@ -8,11 +8,11 @@ import postsOperations from "../../redux/posts/post-operations";
 import style from "./posts.module.css";
 
 export default function Posts(props) {
-  const dispatch = useDispatch();
   let history = useHistory();
   const [posts, setPosts] = useState(null);
   const [newPostBackdrop, setNewPostBackdrop] = useState(false); //flag for backdrop (open or close)
-  const currentAuthUser = useSelector((state) => state.users.currentAuthUser);
+  const currentAuthUser = useSelector((state) => state.user.user);
+  const token = useSelector((state) => state.user.token);
 
   useEffect(() => {
     postsApi
@@ -21,27 +21,33 @@ export default function Posts(props) {
         setPosts(data);
       })
       .catch(function (error) {
-        alert(error.message);
+        alert(error.response.data.error);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  const addPostHandler = () => {
+    if (token) {
+      setNewPostBackdrop(!newPostBackdrop);
+    } else {
+      alert("need auth user");
+      history.push("login");
+    }
+  };
+  const showUserPostsHandler = () => {
+    if (token) {
+      history.push("current-user-posts");
+    } else {
+      alert("need auth user");
+      history.push("login");
+    }
+  };
   const addNewPost = (post) => {
-    dispatch(postsOperations.createNewPost(post));
-    postsApi
-      .fetchAllPosts()
-      .then(function ({ data }) {
-        alert("Note added successfully");
-        setPosts(data);
-        window.scrollTo({
-          top: 1000,
-          behavior: "smooth",
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
     setNewPostBackdrop(!newPostBackdrop);
+    postsOperations.createNewPost(post).then((data) => setPosts(data));
+    window.scrollTo({
+      top: 1000,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -53,28 +59,14 @@ export default function Posts(props) {
             <button
               className={style.sectionNavBtn}
               type="button"
-              onClick={() => {
-                if (currentAuthUser.name) {
-                  setNewPostBackdrop(!newPostBackdrop);
-                } else {
-                  alert("need auth user");
-                  history.push("login");
-                }
-              }}
+              onClick={() => addPostHandler()}
             >
               ADD NEW POST
             </button>
             <button
               className={style.sectionNavBtn}
               type="button"
-              onClick={() => {
-                if (currentAuthUser.name) {
-                  history.push("current-user-posts");
-                } else {
-                  alert("need auth user");
-                  history.push("login");
-                }
-              }}
+              onClick={() => showUserPostsHandler()}
             >
               SHOW MY POSTS
             </button>

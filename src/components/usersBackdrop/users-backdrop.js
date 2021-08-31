@@ -1,14 +1,23 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik, Field, Form } from "formik";
-import usersApi from "../../servises/users-api";
+import usersOperations from "../../redux/users/users-operations";
 import style from "./usersBackdrop.module.css";
 
-export default function UsersBackdrop({
-  setEditUserFlag,
-  editUserFlag,
-  currentUser,
-  fetchCurrentAuthUser,
-}) {
+export default function UsersBackdrop({ setEditUserFlag, editUserFlag }) {
+  const dispatch = useDispatch();
+  const currentAuthUser = useSelector((state) => state.user.user);
+  const initValues = {
+    name: currentAuthUser.name || "",
+    extra_details: currentAuthUser.extra_details || "",
+    skills: currentAuthUser.skills || "",
+    profession: currentAuthUser.profession || "",
+    details: currentAuthUser.details || "",
+  };
+  const onSubmit = (values) => {
+    dispatch(usersOperations.editUser(currentAuthUser._id, values));
+    setEditUserFlag(!editUserFlag);
+  };
   return (
     <div className={style.backdrop}>
       <div className={style.backdropFormWrapper}>
@@ -21,31 +30,8 @@ export default function UsersBackdrop({
         </button>
         <h2 className={style.backdropFormTitle}>Edit your profile</h2>
         <Formik
-          initialValues={{
-            name: currentUser ? currentUser.name : "",
-            extra_details: currentUser ? currentUser.extra_details : "",
-            skills: currentUser ? currentUser.skills : "",
-            profession: currentUser ? currentUser.profession : "",
-            details: currentUser ? currentUser.details : "",
-          }}
-          onSubmit={async ({
-            name,
-            extra_details,
-            skills,
-            profession,
-            details,
-          }) => {
-            usersApi
-              .fetchPatchCurrentAuthUser(currentUser._id, {
-                name,
-                extra_details,
-                skills,
-                profession,
-                details,
-              })
-              .then((_) => fetchCurrentAuthUser());
-            setEditUserFlag(!editUserFlag);
-          }}
+          initialValues={initValues}
+          onSubmit={(values) => onSubmit(values)}
         >
           <Form className={style.backdropForm}>
             <label htmlFor="name">Name:</label>

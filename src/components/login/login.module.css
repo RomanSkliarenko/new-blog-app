@@ -41,3 +41,8 @@ label {
   background-color: black;
   border: 2px solid green;
 }
+
+.errorMsg {
+  color: #ff0000;
+  font-weight: 600;
+}

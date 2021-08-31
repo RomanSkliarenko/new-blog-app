@@ -1,34 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import usersOperations from "../../redux/users/users-operations";
 import style from "./navigation.module.css";
-const linkStyles = {
-  base: {
-    color: "black",
-    textDecoration: "none",
-    fontWeight: 700,
-  },
-
-  active: {
-    fontWeight: 800,
-    borderTop: "4px solid green",
-    fontSize: 27,
-  },
-};
 
 export default function Navigation() {
   let history = useHistory();
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.users.currentAuthUser);
-  useEffect(() => {}, []);
+  const currentUser = useSelector((state) => state.user.user);
   return (
     <nav className={style.navContainer}>
       <NavLink
         exact
-        style={linkStyles.base}
-        activeStyle={linkStyles.active}
+        className={style.base}
+        activeClassName={style.active}
         to={{
           pathname: "/",
         }}
@@ -37,8 +23,8 @@ export default function Navigation() {
       </NavLink>
       <NavLink
         exact
-        style={linkStyles.base}
-        activeStyle={linkStyles.active}
+        className={style.base}
+        activeClassName={style.active}
         to={{
           pathname: "/posts",
         }}
@@ -47,8 +33,8 @@ export default function Navigation() {
       </NavLink>
       <NavLink
         exact
-        style={linkStyles.base}
-        activeStyle={linkStyles.active}
+        className={style.base}
+        activeClassName={style.active}
         to={{
           pathname: "/all-users",
         }}
@@ -58,8 +44,8 @@ export default function Navigation() {
       {currentUser.name ? null : (
         <NavLink
           exact
-          style={linkStyles.base}
-          activeStyle={linkStyles.active}
+          className={style.base}
+          activeClassName={style.active}
           to={{
             pathname: "/sign-up",
           }}
@@ -70,8 +56,8 @@ export default function Navigation() {
       {currentUser.name ? null : (
         <NavLink
           exact
-          style={linkStyles.base}
-          activeStyle={linkStyles.active}
+          className={style.base}
+          activeClassName={style.active}
           to={{
             pathname: "/login",
           }}
@@ -82,8 +68,8 @@ export default function Navigation() {
       {currentUser.name ? (
         <NavLink
           exact
-          style={linkStyles.base}
-          activeStyle={linkStyles.active}
+          className={style.base}
+          activeClassName={style.active}
           to={{
             pathname: "/profile",
           }}

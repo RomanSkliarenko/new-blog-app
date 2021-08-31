@@ -1,6 +1,6 @@
 import axiosApiInstance from "../servises/interseptor";
-axiosApiInstance.defaults.baseURL =
-  "https://nodejs-test-api-blog.herokuapp.com/api/v1";
+
+// axiosApiInstance.defaults.baseURL = "http://51.158.179.21/api/v1/";
 
 const fetchAllPosts = async () => {
   const { data } = await axiosApiInstance.get("/posts?limit=0");

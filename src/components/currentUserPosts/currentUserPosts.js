@@ -1,33 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import PostsBackdrop from "../postsBackdrop/posts-backdrop";
 import postsOperations from "../../redux/posts/post-operations";
 import Loader from "react-loader-spinner";
-import postsApi from "../../servises/posts-api";
 import style from "./currentUserPosts.module.css";
 
 export default function CurrentUserPosts(props) {
   const [posts, setPosts] = useState(null);
   let history = useHistory();
-  const dispatch = useDispatch();
   const [newPostBackdrop, setNewPostBackdrop] = useState(false); //flag for backdrop (open or close)
-  const { _id } = useSelector((state) => state.users.currentAuthUser); //current user
+  const { _id: userId } = useSelector((state) => state.user.user); //current user
 
   const getCurrentUserPosts = () => {
-    postsApi
-      .fetchAllPosts()
-      .then(function ({ data }) {
-        setPosts(data.filter((post) => post.postedBy === _id));
-      })
-      .catch(function (error) {
-        alert(error);
-      });
+    postsOperations.getCurrentUserPosts(userId).then((res) => setPosts(res));
   };
-  const addCurrentAuthUserPost = (post) => {
-    dispatch(postsOperations.createNewPost(post));
-    getCurrentUserPosts();
+  const createNewPost = (post) => {
+    postsOperations
+      .createNewPost(post)
+      .then((data) =>
+        setPosts(data.filter((post) => post.postedBy === userId))
+      );
     setNewPostBackdrop(!newPostBackdrop);
+    alert("Note added successfully");
+  };
+  const deletePost = (postId, userId) => {
+    postsOperations.deletePost(postId, userId).then((data) => setPosts(data));
   };
 
   useEffect(() => {
@@ -76,9 +74,7 @@ export default function CurrentUserPosts(props) {
                     className={style.postsItemBtn}
                     type="button"
                     onClick={() => {
-                      postsApi
-                        .fetchDeletePost(post._id)
-                        .then(() => getCurrentUserPosts());
+                      deletePost(post._id, userId);
                     }}
                   >
                     Delete
@@ -99,7 +95,7 @@ export default function CurrentUserPosts(props) {
       )}
       {newPostBackdrop ? (
         <PostsBackdrop
-          action={addCurrentAuthUserPost}
+          action={createNewPost}
           newPostBackdrop={newPostBackdrop}
           setNewPostBackdrop={setNewPostBackdrop}
         />

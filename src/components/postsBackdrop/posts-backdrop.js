@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Formik, Field, Form } from "formik";
+import { Formik, Field, Form, ErrorMessage } from "formik";
 import style from "./postsBackdrop.module.css";
+import { newPostSchema } from "../../servises/validationSchema";
 
 export default function PostsBackdrop({
   setNewPostBackdrop, //set flag
@@ -14,6 +15,11 @@ export default function PostsBackdrop({
     setEdit(editOrCreate); //flag for backdrop title
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const initValues = {
+    title: currentPost?.title || "",
+    fullText: currentPost?.fullText || "",
+    description: currentPost?.description || "",
+  };
 
   return (
     <div className={style.backdrop}>
@@ -29,17 +35,25 @@ export default function PostsBackdrop({
           {edit ? "Edit your post" : "Create new post"}
         </h2>
         <Formik
-          initialValues={{
-            title: currentPost ? currentPost.title : "",
-            fullText: currentPost ? currentPost.fullText : "",
-            description: currentPost ? currentPost.description : "",
-          }}
-          onSubmit={async ({ title, fullText, description }) => {
-            action({ title, fullText, description }, currentPost?._id);
+          initialValues={initValues}
+          validationSchema={newPostSchema}
+          onSubmit={(values) => {
+            action(values, currentPost?._id);
           }}
         >
           <Form className="backdrop-form">
-            <label htmlFor="title">Name:</label>
+            <ErrorMessage name="title" component="div" className="errorMsg" />
+            <ErrorMessage
+              name="fullText"
+              component="div"
+              className="errorMsg"
+            />
+            <ErrorMessage
+              name="description"
+              component="div"
+              className="errorMsg"
+            />
+            <label htmlFor="title">Title:</label>
             <Field
               id="title"
               name="title"

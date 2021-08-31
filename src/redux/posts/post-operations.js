@@ -1,16 +1,36 @@
 import postsApi from "../../servises/posts-api";
-// import postsActions from "../posts/post-actions";
 
-const createNewPost = (post) => async (dispatch) => {
-  await postsApi
-    .fetchCreateNewPost(post)
-    .then(function (_) {})
-    .catch(function (error) {
-      alert(error);
-    });
+const createNewPost = async (post) => {
+  try {
+    await postsApi.fetchCreateNewPost(post);
+    const { data } = await postsApi.fetchAllPosts();
+    return data;
+  } catch (error) {
+    alert(error);
+  }
+};
+const deletePost = async (postId, userId) => {
+  try {
+    await postsApi.fetchDeletePost(postId);
+    const { data } = await postsApi.fetchAllPosts();
+    return data.filter((post) => post.postedBy === userId);
+  } catch (error) {
+    alert(error);
+  }
+};
+
+const getCurrentUserPosts = async (id) => {
+  try {
+    const { data } = await postsApi.fetchAllPosts();
+    return data.filter((post) => post.postedBy === id);
+  } catch (error) {
+    alert(error);
+  }
 };
 
 const postsOperations = {
   createNewPost,
+  deletePost,
+  getCurrentUserPosts,
 };
 export default postsOperations;

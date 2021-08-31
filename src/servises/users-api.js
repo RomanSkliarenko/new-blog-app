@@ -1,10 +1,13 @@
 import axiosApiInstance from "../servises/interseptor";
-
-axiosApiInstance.defaults.baseURL =
-  "https://nodejs-test-api-blog.herokuapp.com/api/v1";
+// axiosApiInstance.defaults.baseURL = "http://51.158.179.21/api/v1/";
 
 const fetchUsers = async () => {
   const { data } = await axiosApiInstance.get("/users?limit=0");
+  return data;
+};
+
+const fetchSignUp = async (user) => {
+  const { data } = await axiosApiInstance.post("/users", user);
   return data;
 };
 const fetchAddUserAvatar = async (id, avatar) => {
@@ -41,6 +44,7 @@ const fetchDeleteAuthUser = async (id) => {
 };
 
 const usersApi = {
+  fetchSignUp,
   fetchAddUserAvatar,
   fetchPatchCurrentAuthUser,
   fetchDeleteAuthUser,

@@ -1,5 +1,7 @@
 const axios = require("axios");
-const axiosApiInstance = axios.create();
+const axiosApiInstance = axios.create({
+  baseURL: "http://51.158.179.21/api/v1/",
+});
 
 axiosApiInstance.interceptors.request.use(
   async (config) => {
@@ -15,7 +17,6 @@ axiosApiInstance.interceptors.request.use(
   }
 );
 
-// Response interceptor for API calls
 axiosApiInstance.interceptors.response.use(
   (response) => {
     return response;
@@ -24,5 +25,14 @@ axiosApiInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const userToken = {
+  set(token) {
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  },
+  unset() {
+    axios.defaults.headers.common.Authorization = ``;
+  },
+};
 
 export default axiosApiInstance;

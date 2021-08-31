@@ -1,21 +1,20 @@
-import { combineReducers } from "redux";
-import { createReducer } from "@reduxjs/toolkit";
-import usersAction from "./users-action";
+import { createSlice } from "@reduxjs/toolkit";
 
-const currentAuthUserReducer = createReducer(
-  {},
-  {
-    [usersAction.setCurrentAuthUserSuccess]: (_, { payload }) => payload,
-  }
-);
-
-const tokenReducer = createReducer(null, {
-  [usersAction.setUserTokenSuccess]: (_, { payload }) => payload,
+const currentAuthUserSlice = createSlice({
+  name: "currentAuthUser",
+  initialState: { user: {}, token: null },
+  reducers: {
+    setCurrentAuthUser(state, action) {
+      const { payload } = action;
+      state.user = payload;
+    },
+    setUserToken(state, action) {
+      const { payload } = action;
+      state.token = payload;
+    },
+  },
 });
 
-const usersReducer = combineReducers({
-  currentAuthUser: currentAuthUserReducer,
-  token: tokenReducer,
-});
-
-export default usersReducer;
+export const { setCurrentAuthUser, setUserToken } =
+  currentAuthUserSlice.actions;
+export default currentAuthUserSlice.reducer;

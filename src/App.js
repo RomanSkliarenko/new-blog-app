@@ -12,6 +12,7 @@ import AllUsers from "./components/allUsers/all-users";
 import SelectedPost from "./components/selectedPost/selected-post";
 import SelectedUser from "./components/selectedUser/selected-user";
 import CurrentUserPosts from "./components/currentUserPosts/currentUserPosts";
+import PrivateRoute from "./servises/PrivateRoute";
 
 function App() {
   return (
@@ -24,9 +25,14 @@ function App() {
         <Route path="/sign-up" component={SignUp} />
         <Route path="/posts" exact component={Posts} />
         <Route path="/posts/:id" component={SelectedPost} />
-        <Route path="/current-user-posts" exact component={CurrentUserPosts} />
+        <PrivateRoute
+          path="/current-user-posts"
+          exact
+          component={CurrentUserPosts}
+          redirectTo="/login"
+        />
         <Route path="/current-user-posts/:id" component={SelectedPost} />
-        <Route path="/profile" component={Profile} />
+        <PrivateRoute path="/profile" redirectTo="/login" component={Profile} />
         <Route path="/all-users" exact component={AllUsers} />
         <Route path="/all-users/:id" component={SelectedUser} />
         <Route component={NotFound} />
