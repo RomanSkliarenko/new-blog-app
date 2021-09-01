@@ -3,10 +3,6 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import style from "./postsBackdrop.module.css";
 import { newPostSchema } from "../../servises/validationSchema";
 
-const LABEL = {
-  Edit: "EDIT",
-};
-
 export default function PostsBackdrop({
   setNewPostBackdrop, //set flag
   newPostBackdrop, //flag
@@ -20,7 +16,6 @@ export default function PostsBackdrop({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const initValues = {
-    id: currentPost?.id,
     title: currentPost?.title || "",
     fullText: currentPost?.fullText || "",
     description: currentPost?.description || "",
@@ -42,7 +37,9 @@ export default function PostsBackdrop({
         <Formik
           initialValues={initValues}
           validationSchema={newPostSchema}
-          onSubmit={action}
+          onSubmit={(values) => {
+            action(values, currentPost?._id);
+          }}
         >
           <Form className="backdrop-form">
             <ErrorMessage name="title" component="div" className="errorMsg" />
@@ -68,7 +65,6 @@ export default function PostsBackdrop({
             <Field
               id="fullText"
               name="fullText"
-              // className={classNames(style.backdropInput, style.backdropInputText)}
               className={`${style.backdropInput} ${style.backdropInputText}`}
               placeholder="Your post"
               as="textarea"
@@ -83,7 +79,7 @@ export default function PostsBackdrop({
               placeholder="Post description"
             />
             <button type="submit" className={style.backdropFormAddBtn}>
-              {edit ? LABEL.Edit : "ADD POST"}
+              {edit ? "EDIT" : "ADD POST"}
             </button>
           </Form>
         </Formik>

@@ -34,6 +34,7 @@ export default function SelectedPost() {
       .then(() => getCurrentPost())
       .then(() => getCurrentPostComments());
     setNewPostBackdrop(!newPostBackdrop);
+    toast(`Success`);
   };
   const addCommentHandler = () => {
     _id
