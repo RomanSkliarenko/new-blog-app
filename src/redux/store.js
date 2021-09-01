@@ -15,7 +15,6 @@ import {
 import storage from "redux-persist/lib/storage";
 import currentAuthUserSlice from "./users/users.reducer";
 import loadingSlice from "./loading/loadingReducer";
-// import postsReducer from "./posts/post-reducers";
 // import logger from "redux-logger";
 
 const rootPersistConfig = {
@@ -25,7 +24,6 @@ const rootPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  // posts: postsReducer,
   user: currentAuthUserSlice,
   loading: loadingSlice,
 });

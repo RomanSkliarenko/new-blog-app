@@ -61,9 +61,7 @@ export default function Profile() {
           <button
             className={style.sectionNavBtn}
             type="button"
-            onClick={() => {
-              uploadAvatar();
-            }}
+            onClick={() => uploadAvatar()}
           >
             Upload
           </button>

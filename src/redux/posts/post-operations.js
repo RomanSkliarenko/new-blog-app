@@ -1,5 +1,29 @@
 import postsApi from "../../servises/posts-api";
 
+const getAllPosts = async () => {
+  try {
+    const { data } = await postsApi.fetchAllPosts();
+    return data;
+  } catch (error) {
+    alert(error);
+  }
+};
+const getSelectedPost = async (id) => {
+  try {
+    const data = await postsApi.fetchCurrentPost(id);
+    return data;
+  } catch (error) {
+    alert(error);
+  }
+};
+const editPost = async (post, id) => {
+  try {
+    const data = await postsApi.fetchEditPost(post, id);
+    return data;
+  } catch (error) {
+    alert(error);
+  }
+};
 const createNewPost = async (post) => {
   try {
     await postsApi.fetchCreateNewPost(post);
@@ -18,7 +42,6 @@ const deletePost = async (postId, userId) => {
     alert(error);
   }
 };
-
 const getCurrentUserPosts = async (id) => {
   try {
     const { data } = await postsApi.fetchAllPosts();
@@ -27,10 +50,22 @@ const getCurrentUserPosts = async (id) => {
     alert(error);
   }
 };
+const setPostLike = async (id) => {
+  try {
+    const data = await postsApi.fetchPostLike(id);
+    return data;
+  } catch (error) {
+    alert(error);
+  }
+};
 
 const postsOperations = {
+  editPost,
+  getAllPosts,
+  getSelectedPost,
   createNewPost,
   deletePost,
   getCurrentUserPosts,
+  setPostLike,
 };
 export default postsOperations;

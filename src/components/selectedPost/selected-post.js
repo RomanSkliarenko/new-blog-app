@@ -1,79 +1,61 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import postsApi from "../../servises/posts-api";
+import commentsOperations from "../../redux/comments/comments-operations";
+import postsOperations from "../../redux/posts/post-operations";
 import Loader from "react-loader-spinner";
 import PostsBackdrop from "../postsBackdrop/posts-backdrop";
 import style from "./selected-post.module.css";
-
-const NO_COMMENTS_PLACEHOLDER = [
-  {
-    _id: "1",
-    commentedBy: "1",
-    dateCreated: "1",
-    followedCommentID: null,
-    likes: [],
-    postID: "1",
-    text: "No comments yet",
-    __v: 1,
-  },
-];
+import Comment from "../comment/comment";
 
 export default function SelectedPost() {
+  let history = useHistory(); // for back btn
   const [newCommentInputFlag, setNewCommentInputFlag] = useState(false);
   const [newCommentInput, setNewCommentInput] = useState("");
-  const [editCommentInputFlag, setEditCommentInputFlag] = useState(false);
-  const [editCommentInput, setEditCommentInput] = useState("");
   const [newPostBackdrop, setNewPostBackdrop] = useState(false); //flag for backdrop (open or close)
-  let history = useHistory(); // for back btn
   const [currentPost, setCurrentPost] = useState(null);
   const [currentPostComments, setCurrentPostComments] = useState(null);
   const _id = useSelector((state) => state.user.user._id); //current user
   let { id } = useParams();
 
   const getCurrentPost = () => {
-    postsApi
-      .fetchCurrentPost(id)
-      .then(function (data) {
-        setCurrentPost(data);
-      })
-      .catch(function (error) {
-        alert(error.response.data.error);
-        console.log(error);
-      });
+    postsOperations.getSelectedPost(id).then((data) => setCurrentPost(data));
   };
-
   const getCurrentPostComments = () => {
-    postsApi
-      .fetchCurrentPostComments(id)
-      .then(function (data) {
-        setCurrentPostComments(data.length ? data : NO_COMMENTS_PLACEHOLDER);
-      })
-      .catch(function (error) {
-        alert(error.response.data.error);
-      });
+    commentsOperations
+      .getPostCmments(id)
+      .then((res) => setCurrentPostComments(res));
   };
-  useEffect(() => {
-    getCurrentPost();
-    getCurrentPostComments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const editPost = (post, postId) => {
     //func for backdrop action
-    console.log(postId);
-    postsApi
-      .fetchEditPost(post, postId)
-      .then(function ({ data }) {
-        getCurrentPost();
-        getCurrentPostComments();
-      })
-      .catch(function (error) {
-        alert(error.response.data.error);
-        console.log(error);
-      });
+    postsOperations
+      .editPost(post, postId)
+      .then(() => getCurrentPost())
+      .then(() => getCurrentPostComments());
     setNewPostBackdrop(!newPostBackdrop);
   };
+  const addCommentHandler = () => {
+    _id
+      ? setNewCommentInputFlag(!newCommentInputFlag)
+      : alert("register first");
+  };
+  const setPostLike = () => {
+    _id
+      ? postsOperations.setPostLike(id).then(() => getCurrentPost())
+      : alert("register first");
+  };
+  const addComment = () => {
+    commentsOperations.addComment(id, newCommentInput).then(() => {
+      setNewCommentInput("");
+      setNewCommentInputFlag(false);
+      getCurrentPostComments();
+    });
+  };
+  useEffect(() => {
+    getCurrentPostComments();
+    getCurrentPost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -92,14 +74,7 @@ export default function SelectedPost() {
             <button
               className={style.sectionNavBtn}
               type="button"
-              onClick={(_) => {
-                if (_id) {
-                  setNewCommentInputFlag(!newCommentInputFlag);
-                } else {
-                  alert("register first");
-                  return;
-                }
-              }}
+              onClick={() => addCommentHandler()}
             >
               ADD COMMENT
             </button>
@@ -126,22 +101,7 @@ export default function SelectedPost() {
               <button
                 type="button"
                 className={style.likeButton}
-                onClick={() => {
-                  if (_id) {
-                    postsApi
-                      .fetchPostLike(id)
-                      .then(function (_) {
-                        getCurrentPost();
-                      })
-                      .catch(function (error) {
-                        alert(error.response.data.error);
-                        console.log(error);
-                      });
-                  } else {
-                    alert("register first");
-                    history.push("/login");
-                  }
-                }}
+                onClick={() => setPostLike()}
               >
                 💔
               </button>
@@ -166,22 +126,11 @@ export default function SelectedPost() {
                       setNewCommentInput(event.target.value);
                     }}
                     value={newCommentInput}
-                  ></input>
+                  />
                   <button
                     className={style.sectionNavBtn}
                     type="button"
-                    onClick={() => {
-                      postsApi
-                        .fetchAddCommentToSelectedPost(id, newCommentInput)
-                        .then(function (_) {
-                          setNewCommentInput("");
-                          setNewCommentInputFlag(false);
-                          getCurrentPostComments();
-                        })
-                        .catch(function (error) {
-                          alert(error.response.data.error);
-                        });
-                    }}
+                    onClick={() => addComment()}
                   >
                     SEND
                   </button>
@@ -189,99 +138,13 @@ export default function SelectedPost() {
               ) : null}
               <ul>
                 {currentPostComments?.map((comment) => (
-                  <li key={comment._id}>
-                    {comment.text}
-                    <span className={style.itemTitle}> | Likes: </span>
-                    {comment.likes.length}
-                    <button
-                      type="button"
-                      className={style.likeButton}
-                      onClick={() => {
-                        if (_id) {
-                          postsApi
-                            .fetchCommentLike(comment._id)
-                            .then(function (_) {
-                              getCurrentPostComments();
-                            })
-                            .catch(function (error) {
-                              alert(error.response.data.error);
-                              console.log(error);
-                            });
-                        } else {
-                          alert("register first");
-                          return;
-                        }
-                      }}
-                    >
-                      💔
-                    </button>
-                    {_id && comment.commentedBy === _id ? (
-                      <>
-                        <button
-                          className={style.sectionNavBtn}
-                          type="button"
-                          onClick={() => {
-                            postsApi
-                              .fetchDeleteCommentFromSelectedPost(comment._id)
-                              .then(function (_) {
-                                getCurrentPostComments();
-                              })
-                              .catch(function (error) {
-                                alert(error.response.data.error);
-                                console.log(error);
-                              });
-                          }}
-                        >
-                          DELETE
-                        </button>
-                        {editCommentInputFlag ? (
-                          <>
-                            <input
-                              className={style.newCommentInput}
-                              type="text"
-                              value={editCommentInput}
-                              onChange={(e) =>
-                                setEditCommentInput(e.target.value)
-                              }
-                            />
-                            <button
-                              className={style.sectionNavBtn}
-                              type="button"
-                              onClick={() => {
-                                if (editCommentInput !== "") {
-                                  postsApi
-                                    .fetchEditSelectedPostComment(
-                                      comment._id,
-                                      editCommentInput
-                                    )
-                                    .then(function (_) {
-                                      getCurrentPostComments();
-                                    })
-                                    .catch(function (error) {
-                                      alert(error.response.data.error);
-                                      console.log(error);
-                                    });
-                                }
-                                setEditCommentInputFlag(!editCommentInputFlag);
-                              }}
-                            >
-                              EDIT
-                            </button>
-                          </>
-                        ) : (
-                          <button
-                            className={style.sectionNavBtn}
-                            type="button"
-                            onClick={() => {
-                              setEditCommentInputFlag(!editCommentInputFlag);
-                            }}
-                          >
-                            EDIT
-                          </button>
-                        )}
-                      </>
-                    ) : null}
-                  </li>
+                  <Comment
+                    key={comment._id}
+                    authUser={_id ? true : false}
+                    sigleComment={comment}
+                    getCurrentPostComments={getCurrentPostComments}
+                    userId={_id}
+                  />
                 ))}
               </ul>
             </li>

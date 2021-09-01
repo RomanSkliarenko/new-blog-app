@@ -1,11 +1,9 @@
 import axiosApiInstance from "../servises/interseptor";
-// axiosApiInstance.defaults.baseURL = "http://51.158.179.21/api/v1/";
 
 const fetchUsers = async () => {
   const { data } = await axiosApiInstance.get("/users?limit=0");
   return data;
 };
-
 const fetchSignUp = async (user) => {
   const { data } = await axiosApiInstance.post("/users", user);
   return data;
@@ -24,12 +22,10 @@ const fetchSelectedUser = async (id) => {
   const { data } = await axiosApiInstance.get(`/users/${id}`);
   return data;
 };
-
 const fetchLogin = async (user) => {
   const { data } = await axiosApiInstance.post("/auth", user);
   return data;
 };
-
 const fetchCurrentAuthUser = async () => {
   const { data } = await axiosApiInstance.get("/auth/user");
   return data;

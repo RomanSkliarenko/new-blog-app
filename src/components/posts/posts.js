@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import PostsBackdrop from "../postsBackdrop/posts-backdrop";
 import Loader from "react-loader-spinner";
-import postsApi from "../../servises/posts-api";
 import postsOperations from "../../redux/posts/post-operations";
 import style from "./posts.module.css";
 
@@ -15,14 +14,7 @@ export default function Posts(props) {
   const token = useSelector((state) => state.user.token);
 
   useEffect(() => {
-    postsApi
-      .fetchAllPosts()
-      .then(function ({ data }) {
-        setPosts(data);
-      })
-      .catch(function (error) {
-        alert(error.response.data.error);
-      });
+    postsOperations.getAllPosts().then((data) => setPosts(data));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const addPostHandler = () => {
