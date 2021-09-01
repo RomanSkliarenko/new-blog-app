@@ -5,6 +5,7 @@ import PostsBackdrop from "../postsBackdrop/posts-backdrop";
 import Loader from "react-loader-spinner";
 import postsOperations from "../../redux/posts/post-operations";
 import style from "./posts.module.css";
+import { toast } from "react-toastify";
 
 export default function Posts(props) {
   let history = useHistory();
@@ -21,7 +22,7 @@ export default function Posts(props) {
     if (token) {
       setNewPostBackdrop(!newPostBackdrop);
     } else {
-      alert("need auth user");
+      toast(`Login first, please!`);
       history.push("login");
     }
   };
@@ -29,7 +30,7 @@ export default function Posts(props) {
     if (token) {
       history.push("current-user-posts");
     } else {
-      alert("need auth user");
+      toast(`Login first, please!`);
       history.push("login");
     }
   };

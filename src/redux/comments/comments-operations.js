@@ -2,8 +2,7 @@ import commentsApi from "../../servises/comments-api";
 
 const getAllPostComments = async (id) => {
   try {
-    const data = await commentsApi.currentPostCommentsReq(id);
-    return data;
+    return await commentsApi.currentPostCommentsReq(id);
   } catch (error) {
     alert(error);
   }

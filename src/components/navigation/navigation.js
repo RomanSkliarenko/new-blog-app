@@ -9,15 +9,14 @@ export default function Navigation() {
   let history = useHistory();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.user);
+
   return (
     <nav className={style.navContainer}>
       <NavLink
         exact
         className={style.base}
         activeClassName={style.active}
-        to={{
-          pathname: "/",
-        }}
+        to={"/"}
       >
         HOME
       </NavLink>

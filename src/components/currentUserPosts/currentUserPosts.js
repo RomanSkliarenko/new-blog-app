@@ -5,6 +5,7 @@ import PostsBackdrop from "../postsBackdrop/posts-backdrop";
 import postsOperations from "../../redux/posts/post-operations";
 import Loader from "react-loader-spinner";
 import style from "./currentUserPosts.module.css";
+import { toast } from "react-toastify";
 
 export default function CurrentUserPosts(props) {
   const [posts, setPosts] = useState(null);
@@ -22,7 +23,7 @@ export default function CurrentUserPosts(props) {
         setPosts(data.filter((post) => post.postedBy === userId))
       );
     setNewPostBackdrop(!newPostBackdrop);
-    alert("Note added successfully");
+    toast(`Note added successfully`);
   };
   const deletePost = (postId, userId) => {
     postsOperations.deletePost(postId, userId).then((data) => setPosts(data));

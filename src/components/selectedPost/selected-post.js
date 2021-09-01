@@ -7,6 +7,7 @@ import Loader from "react-loader-spinner";
 import PostsBackdrop from "../postsBackdrop/posts-backdrop";
 import style from "./selected-post.module.css";
 import Comment from "../comment/comment";
+import { toast } from "react-toastify";
 
 export default function SelectedPost() {
   let history = useHistory(); // for back btn
@@ -37,12 +38,12 @@ export default function SelectedPost() {
   const addCommentHandler = () => {
     _id
       ? setNewCommentInputFlag(!newCommentInputFlag)
-      : alert("register first");
+      : toast(`Login first, please!`);
   };
   const setPostLike = () => {
     _id
       ? postsOperations.setPostLike(id).then(() => getCurrentPost())
-      : alert("register first");
+      : toast(`Login first, please!`);
   };
   const addComment = () => {
     commentsOperations.addComment(id, newCommentInput).then(() => {

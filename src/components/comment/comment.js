@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import style from "./comment.module.css";
 import commentsOperations from "../../redux/comments/comments-operations";
+import { toast } from "react-toastify";
 
 export default function Comment(props) {
   const [editCommentInputFlag, setEditCommentInputFlag] = useState(false);
@@ -14,7 +15,7 @@ export default function Comment(props) {
       ? commentsOperations
           .setCommentLike(id)
           .then(() => getCurrentPostComments())
-      : alert("register first");
+      : toast(`Login first, please!`);
   };
   const deleteComment = (id) => {
     commentsOperations.deleteComment(id).then(() => getCurrentPostComments());
@@ -24,7 +25,7 @@ export default function Comment(props) {
       ? commentsOperations
           .editComment(id, text)
           .then(() => getCurrentPostComments())
-      : alert("Edit field must have any value!");
+      : toast(`Edit field must have any value!`);
     setEditCommentInputFlag(!editCommentInputFlag);
   };
 

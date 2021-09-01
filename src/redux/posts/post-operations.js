@@ -1,11 +1,12 @@
 import postsApi from "../../servises/posts-api";
+import { toast } from "react-toastify";
 
 const getAllPosts = async () => {
   try {
     const { data } = await postsApi.fetchAllPosts();
     return data;
   } catch (error) {
-    alert(error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const getSelectedPost = async (id) => {
@@ -13,7 +14,7 @@ const getSelectedPost = async (id) => {
     const data = await postsApi.fetchCurrentPost(id);
     return data;
   } catch (error) {
-    alert(error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const editPost = async (post, id) => {
@@ -21,7 +22,7 @@ const editPost = async (post, id) => {
     const data = await postsApi.fetchEditPost(post, id);
     return data;
   } catch (error) {
-    alert(error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const createNewPost = async (post) => {
@@ -30,7 +31,7 @@ const createNewPost = async (post) => {
     const { data } = await postsApi.fetchAllPosts();
     return data;
   } catch (error) {
-    alert(error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const deletePost = async (postId, userId) => {
@@ -39,7 +40,7 @@ const deletePost = async (postId, userId) => {
     const { data } = await postsApi.fetchAllPosts();
     return data.filter((post) => post.postedBy === userId);
   } catch (error) {
-    alert(error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const getCurrentUserPosts = async (id) => {
@@ -47,7 +48,7 @@ const getCurrentUserPosts = async (id) => {
     const { data } = await postsApi.fetchAllPosts();
     return data.filter((post) => post.postedBy === id);
   } catch (error) {
-    alert(error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const setPostLike = async (id) => {
@@ -55,7 +56,7 @@ const setPostLike = async (id) => {
     const data = await postsApi.fetchPostLike(id);
     return data;
   } catch (error) {
-    alert(error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 

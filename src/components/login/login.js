@@ -6,8 +6,6 @@ import usersOperations from "../../redux/users/users-operations";
 import style from "./login.module.css";
 import { loginSchema } from "../../servises/validationSchema";
 
-// @TODO: 1. validation schema, 2. move onSubmit logic to the separate function, 3. create const variable for initial values
-
 const initialValues = {
   email: "",
   password: "",
@@ -16,17 +14,19 @@ const initialValues = {
 export default function Login() {
   const dispatch = useDispatch();
   let history = useHistory();
+
   const onSubmitHandler = (user) => {
     dispatch(usersOperations.login(user));
     history.push("/");
   };
+
   return (
     <div className={style.loginWrapper}>
       <h2 className={style.loginTitle}>Login</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={loginSchema}
-        onSubmit={(user) => onSubmitHandler(user)}
+        onSubmit={onSubmitHandler}
       >
         <Form>
           <ErrorMessage name="email" component="div" className="errorMsg" />

@@ -1,13 +1,14 @@
 import usersApi from "../../servises/users-api";
 import { userToken } from "../../servises/interseptor";
 import { setCurrentAuthUser, setUserToken } from "../users/users.reducer";
+import { toast } from "react-toastify";
 
 const signUp = (user) => async (dispatch) => {
   try {
     await usersApi.fetchSignUp(user);
     dispatch(login({ email: user.email, password: user.password }));
   } catch (error) {
-    alert(error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const login = (user) => async (dispatch) => {
@@ -19,7 +20,7 @@ const login = (user) => async (dispatch) => {
     const data = await usersApi.fetchCurrentAuthUser();
     dispatch(setCurrentAuthUser(data));
   } catch (error) {
-    alert(error.response.data.error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const getAuthUser = async () => {
@@ -28,7 +29,7 @@ const getAuthUser = async () => {
     setCurrentAuthUser(data);
     return data;
   } catch (error) {
-    alert(error.response.data.error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const getSelectedUser = async (id) => {
@@ -36,7 +37,7 @@ const getSelectedUser = async (id) => {
     const data = await usersApi.fetchSelectedUser(id);
     return data;
   } catch (error) {
-    alert(error.response.data.error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const logout = () => (dispatch) => {
@@ -55,7 +56,7 @@ const deleteUser = (user) => async (dispatch) => {
       dispatch(setCurrentAuthUser({}));
       dispatch(setUserToken(null));
     } catch (error) {
-      console.log(error);
+      toast(`${error.response.data.error[0].message}`);
     }
   }
 };
@@ -65,7 +66,7 @@ const uploadUserAvatar = (id, avatar) => async (dispatch) => {
     const data = await usersApi.fetchSelectedUser(id);
     dispatch(setCurrentAuthUser(data));
   } catch (error) {
-    alert(error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 const editUser = (id, values) => async (dispatch) => {
@@ -74,7 +75,7 @@ const editUser = (id, values) => async (dispatch) => {
     const data = await usersApi.fetchCurrentAuthUser();
     dispatch(setCurrentAuthUser(data));
   } catch (error) {
-    console.log(error);
+    toast(`${error.response.data.error[0].message}`);
   }
 };
 

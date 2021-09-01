@@ -12,12 +12,15 @@ import AllUsers from "./components/allUsers/all-users";
 import SelectedPost from "./components/selectedPost/selected-post";
 import SelectedUser from "./components/selectedUser/selected-user";
 import CurrentUserPosts from "./components/currentUserPosts/currentUserPosts";
-import PrivateRoute from "./servises/PrivateRoute";
+import PrivateRoute from "./components/PrivateRoute";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <>
       <Navigation />
+      <ToastContainer theme="dark" position="bottom-right"/>
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/new-ficus-app" exact component={Home} />

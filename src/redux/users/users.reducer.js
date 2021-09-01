@@ -12,6 +12,7 @@ const currentAuthUserSlice = createSlice({
       const { payload } = action;
       state.token = payload;
     },
+    logoutUser() {},
   },
 });
 
