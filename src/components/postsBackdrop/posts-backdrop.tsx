@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import style from "./postsBackdrop.module.css";
-import { newPostSchema } from "../../servises/validationSchema";
+import React, { useState, useEffect } from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import style from './postsBackdrop.module.css';
+import { newPostSchema } from '../../servises/validationSchema';
+import { IProps } from './postBackdrop.interface';
 
 export default function PostsBackdrop({
-  setNewPostBackdrop, //set flag
-  newPostBackdrop, //flag
+  setNewPostBackdrop, // set flag
+  newPostBackdrop, // flag
   action,
   currentPost,
   editOrCreate,
-}) {
-  const [edit, setEdit] = useState(false);
+}: IProps) {
+  const [edit, setEdit] = useState<undefined | null | string>(null);
   useEffect(() => {
-    setEdit(editOrCreate); //flag for backdrop title
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setEdit(editOrCreate); // flag for backdrop title
   }, []);
   const initValues = {
-    title: currentPost?.title || "",
-    fullText: currentPost?.fullText || "",
-    description: currentPost?.description || "",
+    title: currentPost?.title || '',
+    fullText: currentPost?.fullText || '',
+    description: currentPost?.description || '',
   };
 
   return (
@@ -32,12 +32,12 @@ export default function PostsBackdrop({
           x
         </button>
         <h2 className={style.backdropFormTitle}>
-          {edit ? "Edit your post" : "Create new post"}
+          {edit ? 'Edit your post' : 'Create new post'}
         </h2>
         <Formik
           initialValues={initValues}
           validationSchema={newPostSchema}
-          onSubmit={(values) => {
+          onSubmit={values => {
             action(values, currentPost?._id);
           }}
         >
@@ -79,7 +79,7 @@ export default function PostsBackdrop({
               placeholder="Post description"
             />
             <button type="submit" className={style.backdropFormAddBtn}>
-              {edit ? "EDIT" : "ADD POST"}
+              {edit ? 'EDIT' : 'ADD POST'}
             </button>
           </Form>
         </Formik>

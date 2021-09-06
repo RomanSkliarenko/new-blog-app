@@ -1,37 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import PostsBackdrop from "../postsBackdrop/posts-backdrop";
-import postsOperations from "../../redux/posts/post-operations";
-import Loader from "react-loader-spinner";
-import style from "./currentUserPosts.module.css";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import PostsBackdrop from '../postsBackdrop/posts-backdrop';
+import postsOperations from '../../redux/posts/post-operations';
+import Loader from 'react-loader-spinner';
+import style from './currentUserPosts.module.css';
+import { toast } from 'react-toastify';
+import IState from '../../common/State.interface';
+import { IPost, IProps } from './currentUserPosts.interface';
 
-export default function CurrentUserPosts(props) {
-  const [posts, setPosts] = useState(null);
-  let history = useHistory();
-  const [newPostBackdrop, setNewPostBackdrop] = useState(false); //flag for backdrop (open or close)
-  const { _id: userId } = useSelector((state) => state.user.user); //current user
+export default function CurrentUserPosts(props: IProps) {
+  const [posts, setPosts] = useState<null | IPost[]>(null);
+  const history = useHistory();
+  const [newPostBackdrop, setNewPostBackdrop] = useState(false); // flag for backdrop (open or close)
+  const { _id: userId } = useSelector((state: IState) => state.user.user); // current user
 
   const getCurrentUserPosts = () => {
-    postsOperations.getCurrentUserPosts(userId).then((res) => setPosts(res));
+    postsOperations.getCurrentUserPosts(userId).then(res => setPosts(res));
   };
-  const createNewPost = (post) => {
+  const createNewPost = (post: IPost) => {
     postsOperations
       .createNewPost(post)
-      .then((data) =>
-        setPosts(data.filter((post) => post.postedBy === userId))
+      .then(data =>
+        setPosts(
+          data.filter((singlePost: IPost) => singlePost.postedBy === userId),
+        ),
       );
     setNewPostBackdrop(!newPostBackdrop);
     toast(`Note added successfully`);
   };
-  const deletePost = (postId, userId) => {
-    postsOperations.deletePost(postId, userId).then((data) => setPosts(data));
+  const deletePost = (postId: string) => {
+    postsOperations.deletePost(postId, userId).then(data => setPosts(data));
   };
 
   useEffect(() => {
     getCurrentUserPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -51,14 +54,14 @@ export default function CurrentUserPosts(props) {
               className={style.sectionNavBtn}
               type="button"
               onClick={() => {
-                history.push("/posts");
+                history.push('/posts');
               }}
             >
               SHOW ALL POSTS
             </button>
           </div>
           <ul className={style.postsList}>
-            {posts?.map((post) => (
+            {posts?.map((post: IPost) => (
               <li key={post._id} className={style.postsItem}>
                 {post.title}
                 <div className={style.sectionNavBtnContainer}>
@@ -75,7 +78,7 @@ export default function CurrentUserPosts(props) {
                     className={style.postsItemBtn}
                     type="button"
                     onClick={() => {
-                      deletePost(post._id, userId);
+                      deletePost(post._id);
                     }}
                   >
                     Delete

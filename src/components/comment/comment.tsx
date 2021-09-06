@@ -1,38 +1,41 @@
-import React, { useState } from "react";
-import style from "./comment.module.css";
-import commentsOperations from "../../redux/comments/comments-operations";
-import { toast } from "react-toastify";
+import React, { useState } from 'react';
+import style from './comment.module.css';
+import commentsOperations from '../../redux/comments/comments-operations';
+import { Props } from './comments.interface';
+import { toast } from 'react-toastify';
 
-export default function Comment(props) {
+export default function Comment({
+  sigleComment,
+  userId,
+  getCurrentPostComments,
+  authUser,
+}: Props) {
   const [editCommentInputFlag, setEditCommentInputFlag] = useState(false);
-  const [editCommentInput, setEditCommentInput] = useState("");
-  const { sigleComment, userId, getCurrentPostComments, authUser } = props;
-  const { text, _id, likes, commentedBy } = sigleComment;
-  const commentId = _id;
+  const [editCommentInput, setEditCommentInput] = useState('');
+  const { text, _id: commentId, likes, commentedBy } = sigleComment;
 
-  const setCommentLike = (id) => {
+  const setCommentLike = (id: string) =>
     authUser
       ? commentsOperations
           .setCommentLike(id)
           .then(() => getCurrentPostComments())
       : toast(`Login first, please!`);
-  };
-  const deleteComment = (id) => {
+  const deleteComment = (id: string) => {
     commentsOperations.deleteComment(id).then(() => getCurrentPostComments());
   };
-  const editComment = (id, text) => {
-    editCommentInput !== ""
+  const editComment = (id: string, commentText: string) => {
+    setEditCommentInputFlag(!editCommentInputFlag);
+    return editCommentInput !== ''
       ? commentsOperations
-          .editComment(id, text)
+          .editComment(id, commentText)
           .then(() => getCurrentPostComments())
       : toast(`Edit field must have any value!`);
-    setEditCommentInputFlag(!editCommentInputFlag);
   };
 
   return (
     <li>
       {text}
-      {commentId === "1" ? null : (
+      {commentId === '1' ? null : (
         <>
           <span className={style.itemTitle}> | Likes: </span>
           {likes.length}
@@ -60,7 +63,7 @@ export default function Comment(props) {
                 className={style.newCommentInput}
                 type="text"
                 value={editCommentInput}
-                onChange={(e) => setEditCommentInput(e.target.value)}
+                onChange={e => setEditCommentInput(e.target.value)}
               />
               <button
                 className={style.sectionNavBtn}

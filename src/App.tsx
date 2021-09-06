@@ -1,26 +1,26 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
-import "./App.css";
-import Home from "./components/home/home";
-import Login from "./components/login/login";
-import Navigation from "./components/navigation/navigation";
-import NotFound from "./components/notFound/notFound";
-import Posts from "./components/posts/posts";
-import Profile from "./components/profile/profile";
-import SignUp from "./components/signUp/signUp";
-import AllUsers from "./components/allUsers/all-users";
-import SelectedPost from "./components/selectedPost/selected-post";
-import SelectedUser from "./components/selectedUser/selected-user";
-import CurrentUserPosts from "./components/currentUserPosts/currentUserPosts";
-import PrivateRoute from "./components/PrivateRoute";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import './App.css';
+import Home from './components/home/home';
+import Login from './components/login/login';
+import Navigation from './components/navigation/navigation';
+import NotFound from './components/notFound/notFound';
+import Posts from './components/posts/posts';
+import Profile from './components/profile/profile';
+import SignUp from './components/signUp/signUp';
+import AllUsers from './components/allUsers/all-users';
+import SelectedPost from './components/selectedPost/selected-post';
+import SelectedUser from './components/selectedUser/selected-user';
+import CurrentUserPosts from './components/currentUserPosts/currentUserPosts';
+import PrivateRoute from './components/PrivateRoute';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <>
       <Navigation />
-      <ToastContainer theme="dark" position="bottom-right"/>
+      <ToastContainer theme="dark" position="bottom-right" />
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/new-ficus-app" exact component={Home} />
