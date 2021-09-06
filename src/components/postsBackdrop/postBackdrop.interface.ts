@@ -16,5 +16,5 @@ export interface IProps {
   newPostBackdrop: boolean;
   action: (a?:any,b?:IPost|object|string,c?:IPost|object|string) => void;
   currentPost?: IPost;
-  editOrCreate?: string;
+  editOrCreate?: boolean;
 }

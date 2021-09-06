@@ -11,7 +11,7 @@ export default function PostsBackdrop({
   currentPost,
   editOrCreate,
 }: IProps) {
-  const [edit, setEdit] = useState<undefined | null | string>(null);
+  const [edit, setEdit] = useState<undefined | boolean | null>(null);
   useEffect(() => {
     setEdit(editOrCreate); // flag for backdrop title
   }, []);

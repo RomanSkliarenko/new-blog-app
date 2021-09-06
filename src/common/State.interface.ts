@@ -3,7 +3,7 @@ interface IUser {
   email: string;
   name: string;
   avatar: string;
-  extraDetails: string;
+  "extra_details": string;
   skills: string;
   profession: string;
   details: string;
