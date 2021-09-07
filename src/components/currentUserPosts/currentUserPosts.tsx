@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import PostsBackdrop from '../postsBackdrop/posts-backdrop';
 import postsOperations from '../../redux/posts/post-operations';
 import Loader from 'react-loader-spinner';
 import style from './currentUserPosts.module.css';
 import { toast } from 'react-toastify';
-import IState from '../../common/State.interface';
-import { IPost, IProps } from './currentUserPosts.interface';
+import { IProps } from './currentUserPosts.interface';
+import { IPost } from '../postsBackdrop/postBackdrop.interface';
+import { useAppSelector } from '../../redux/store';
 
 export default function CurrentUserPosts(props: IProps) {
-  const [posts, setPosts] = useState<null | IPost[]>(null);
+  const [posts, setPosts] = useState<IPost[]>();
   const history = useHistory();
   const [newPostBackdrop, setNewPostBackdrop] = useState(false); // flag for backdrop (open or close)
-  const { _id: userId } = useSelector((state: IState) => state.user.user); // current user
+  const userId = useAppSelector(state => state.currentUser.user?._id); // current user
 
   const getCurrentUserPosts = () => {
-    postsOperations.getCurrentUserPosts(userId).then(res => setPosts(res));
+    postsOperations.getCurrentUserPosts(userId!).then(res => setPosts(res));
   };
-  const createNewPost = (post: IPost) => {
+  const createNewPost = (values: {
+    title: string;
+    fullText: string;
+    description: string;
+  }) => {
     postsOperations
-      .createNewPost(post)
+      .createNewPost(values)
       .then(data =>
         setPosts(
           data.filter((singlePost: IPost) => singlePost.postedBy === userId),
@@ -30,7 +34,7 @@ export default function CurrentUserPosts(props: IProps) {
     toast(`Note added successfully`);
   };
   const deletePost = (postId: string) => {
-    postsOperations.deletePost(postId, userId).then(data => setPosts(data));
+    postsOperations.deletePost(postId, userId!).then(data => setPosts(data));
   };
 
   useEffect(() => {
@@ -78,7 +82,7 @@ export default function CurrentUserPosts(props: IProps) {
                     className={style.postsItemBtn}
                     type="button"
                     onClick={() => {
-                      deletePost(post._id);
+                      deletePost(post._id!);
                     }}
                   >
                     Delete
@@ -99,7 +103,7 @@ export default function CurrentUserPosts(props: IProps) {
       )}
       {newPostBackdrop ? (
         <PostsBackdrop
-          action={createNewPost}
+          createNewPost={createNewPost}
           newPostBackdrop={newPostBackdrop}
           setNewPostBackdrop={setNewPostBackdrop}
         />

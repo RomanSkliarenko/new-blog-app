@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import PostsBackdrop from '../postsBackdrop/posts-backdrop';
 import Loader from 'react-loader-spinner';
 import postsOperations from '../../redux/posts/post-operations';
 import style from './posts.module.css';
 import { toast } from 'react-toastify';
-import IState from '../../common/State.interface';
 import IPost from '../../common/Post.interface';
 import IProps from '../../common/Props.interface';
+import { useAppSelector } from '../../redux/store';
 
 export default function Posts(props: IProps) {
   const history = useHistory();
   const [posts, setPosts] = useState<IPost[] | null>(null);
   const [newPostBackdrop, setNewPostBackdrop] = useState(false); // flag for backdrop (open or close)
-  const currentAuthUser = useSelector((state: IState) => state.user.user);
-  const token = useSelector((state: IState) => state.user.token);
+  const currentAuthUser = useAppSelector(state => state.currentUser.user);
+  const token = useAppSelector(state => state.currentUser.token);
 
   useEffect(() => {
     postsOperations.getAllPosts().then(data => setPosts(data));
@@ -36,13 +35,19 @@ export default function Posts(props: IProps) {
       history.push('login');
     }
   };
-  const addNewPost = (post: IPost) => {
+
+  const createNewPost = (values: {
+    title: string;
+    fullText: string;
+    description: string;
+  }) => {
     setNewPostBackdrop(!newPostBackdrop);
-    postsOperations.createNewPost(post).then(data => setPosts(data));
+    postsOperations.createNewPost(values).then(data => setPosts(data));
     window.scrollTo({
       top: 1000,
       behavior: 'smooth',
     });
+    toast(`Note added successfully`);
   };
 
   return (
@@ -71,7 +76,7 @@ export default function Posts(props: IProps) {
               <li
                 key={post._id}
                 className={
-                  post.postedBy !== currentAuthUser._id
+                  post.postedBy !== currentAuthUser!._id
                     ? style.postsItem
                     : `${style.currentUserPostsItem} ${style.postsItem}`
                 }
@@ -102,7 +107,7 @@ export default function Posts(props: IProps) {
       {newPostBackdrop ? (
         <PostsBackdrop
           editOrCreate={false}
-          action={addNewPost}
+          createNewPost={createNewPost}
           newPostBackdrop={newPostBackdrop}
           setNewPostBackdrop={setNewPostBackdrop}
         />

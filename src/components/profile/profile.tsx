@@ -1,24 +1,25 @@
 import React, { useState, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import usersOperations from '../../redux/users/users-operations';
 import UsersBackdrop from '../usersBackdrop/users-backdrop';
 import userAvatr from '../../images/user-default-avatar.png';
 import style from './profile.module.css';
-import IState from '../../common/State.interface';
+import { useAppSelector } from '../../redux/store';
 
 export default function Profile() {
   const dispatch = useDispatch();
   const [editUserFlag, setEditUserFlag] = useState<boolean>(false);
-  const [currentUserAvatar, setCurrentUserAvatar] = useState<
-    FileList | File | null
-  >(null);
-  const currentAuthUser = useSelector((state: IState) => state.user.user);
-  const avatarInput = useRef(null);
+  const [currentUserAvatar, setCurrentUserAvatar] = useState<File | null>(null);
+  const currentAuthUser = useAppSelector(state => state.currentUser.user);
+  const avatarInput = useRef<HTMLInputElement>(null);
 
   const uploadAvatar = () => {
     // upload user avatar and update currentAuthUser in redux state
     dispatch(
-      usersOperations.uploadUserAvatar(currentAuthUser._id, currentUserAvatar),
+      usersOperations.uploadUserAvatar(
+        currentAuthUser!._id,
+        currentUserAvatar!,
+      ),
     );
     setCurrentUserAvatar(null);
   };
@@ -27,11 +28,10 @@ export default function Profile() {
     <section className={style.profileSectionContainer}>
       <div className={style.profileName}>
         {currentAuthUser ? (
-          <h2>{currentAuthUser.name} profile page</h2>
+          <h2>{currentAuthUser?.name} profile page</h2>
         ) : (
           <h2> Profile page</h2>
         )}
-        ;
       </div>
       <div className={style.profileNavBtnContainer}>
         <button
@@ -47,7 +47,7 @@ export default function Profile() {
           className={style.sectionNavBtn}
           type="button"
           onClick={() => {
-            dispatch(usersOperations.deleteUser(currentAuthUser));
+            dispatch(usersOperations.deleteUser(currentAuthUser!));
           }}
         >
           Delete user
@@ -55,9 +55,9 @@ export default function Profile() {
         <button
           className={style.sectionNavBtn}
           type="button"
-          onClick={() => {
-            // avatarInput.current.click();
-          }}
+          onClick={() =>
+            avatarInput.current ? avatarInput.current.click() : null
+          }
         >
           {currentUserAvatar ? 'Add avatar' : 'Change Avatar'}
         </button>
@@ -135,7 +135,7 @@ export default function Profile() {
         </ul>
         <div>
           <img
-            src={`${process.env.REACT_APP_BACKEND_URL}${currentAuthUser.avatar}`}
+            src={`${process.env.REACT_APP_BACKEND_URL}${currentAuthUser?.avatar}`}
             onError={e => {
               e.currentTarget.src = userAvatr;
             }}
@@ -153,9 +153,11 @@ export default function Profile() {
         ref={avatarInput}
         style={{ display: 'none' }}
         type="file"
-        onChange={event => {
-          // setCurrentUserAvatar(event.target.files[0]);
-        }}
+        onChange={event =>
+          event.target.files
+            ? setCurrentUserAvatar(event.target.files[0])
+            : null
+        }
       />
     </section>
   );

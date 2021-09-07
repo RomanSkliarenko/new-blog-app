@@ -42,7 +42,7 @@ export default function Comment({
           <button
             type="button"
             className={style.likeButton}
-            onClick={() => setCommentLike(commentId)}
+            onClick={() => setCommentLike(commentId!)}
           >
             💔
           </button>
@@ -53,7 +53,7 @@ export default function Comment({
           <button
             className={style.sectionNavBtn}
             type="button"
-            onClick={() => deleteComment(commentId)}
+            onClick={() => deleteComment(commentId!)}
           >
             DELETE
           </button>
@@ -68,7 +68,7 @@ export default function Comment({
               <button
                 className={style.sectionNavBtn}
                 type="button"
-                onClick={() => editComment(commentId, editCommentInput)}
+                onClick={() => editComment(commentId!, editCommentInput)}
               >
                 EDIT
               </button>

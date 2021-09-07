@@ -14,7 +14,15 @@ export interface IPost {
 export interface IProps {
   setNewPostBackdrop: React.Dispatch<React.SetStateAction<boolean>>;
   newPostBackdrop: boolean;
-  action: (a?:any,b?:IPost|object|string,c?:IPost|object|string) => void;
+  createNewPost?: (values: {
+    title: string;
+    fullText: string;
+    description: string;
+  }) => void;
+  editPost?: (
+    values: { title: string; fullText: string; description: string },
+    postId: string,
+  ) => void;
   currentPost?: IPost;
   editOrCreate?: boolean;
 }

@@ -3,11 +3,13 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import style from './postsBackdrop.module.css';
 import { newPostSchema } from '../../servises/validationSchema';
 import { IProps } from './postBackdrop.interface';
+import IPost from '../../common/Post.interface';
 
 export default function PostsBackdrop({
   setNewPostBackdrop, // set flag
   newPostBackdrop, // flag
-  action,
+  createNewPost,
+  editPost,
   currentPost,
   editOrCreate,
 }: IProps) {
@@ -19,6 +21,19 @@ export default function PostsBackdrop({
     title: currentPost?.title || '',
     fullText: currentPost?.fullText || '',
     description: currentPost?.description || '',
+  };
+
+  const action = (values: {
+    title: string;
+    fullText: string;
+    description: string;
+  }) => {
+    if (editPost) {
+      editPost(values, currentPost?._id!);
+    }
+    if (createNewPost) {
+      createNewPost(values);
+    }
   };
 
   return (
@@ -37,9 +52,13 @@ export default function PostsBackdrop({
         <Formik
           initialValues={initValues}
           validationSchema={newPostSchema}
-          onSubmit={values => {
-            action(values, currentPost?._id);
-          }}
+          onSubmit={
+            action
+            // values => action(values)
+            // createNewPost
+            //   ? createNewPost(values)
+            //   : editPost(values, currentPost?._id!)
+          }
         >
           <Form className="backdrop-form">
             <ErrorMessage name="title" component="div" className="errorMsg" />
