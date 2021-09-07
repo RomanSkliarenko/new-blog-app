@@ -8,8 +8,6 @@ import './index.css';
 import App from './App';
 import 'modern-normalize/modern-normalize.css';
 
-// test
-
 ReactDOM.render(
   <Provider store={store.store}>
     <PersistGate loading={null} persistor={store.persistor}>
