@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { RouteChildrenProps, useHistory } from 'react-router-dom';
 import PostsBackdrop from '../postsBackdrop/posts-backdrop';
 import postsOperations from '../../redux/posts/post-operations';
 import Loader from 'react-loader-spinner';
@@ -10,7 +10,7 @@ import IPost from '../../common/Post.interface';
 import IPostFields from '../../common/PostFields.interface';
 import { useAppSelector } from '../../redux/store';
 
-export default function CurrentUserPosts(props: IProps) {
+const CurrentUserPosts: React.FC<RouteChildrenProps> = props => {
   const [posts, setPosts] = useState<IPost[]>();
   const history = useHistory();
   const [newPostBackdrop, setNewPostBackdrop] = useState(false); // flag for backdrop (open or close)
@@ -70,7 +70,7 @@ export default function CurrentUserPosts(props: IProps) {
                     className={style.postsItemBtn}
                     type="button"
                     onClick={() => {
-                      history.push(`${props.match.url}/${post._id}`);
+                      history.push(`${props.match?.url}/${post._id}`);
                     }}
                   >
                     details
@@ -108,4 +108,6 @@ export default function CurrentUserPosts(props: IProps) {
       ) : null}
     </>
   );
-}
+};
+
+export default CurrentUserPosts;

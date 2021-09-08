@@ -9,6 +9,7 @@ import IPost from '../../common/Post.interface';
 import IProps from '../../common/Props.interface';
 import { useAppSelector } from '../../redux/store';
 import IPostFields from '../../common/PostFields.interface';
+import { Button } from '@chakra-ui/react';
 
 export default function Posts(props: IProps) {
   const history = useHistory();

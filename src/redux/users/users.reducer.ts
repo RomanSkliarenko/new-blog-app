@@ -28,7 +28,9 @@ const currentAuthUserSlice = createSlice({
     setUserToken(state, { payload }: PayloadAction<string | null>) {
       state.token = payload;
     },
-    logoutUser() {},
+    logoutUser(state) {
+      return state;
+    },
   },
 });
 

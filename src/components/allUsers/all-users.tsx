@@ -7,10 +7,12 @@ import IUser from '../../common/User.interface';
 
 export default function AllUsers() {
   const [users, setUsers] = useState<IUser[] | null>(null);
+  const history = useHistory();
+
   useEffect(() => {
     usersApi.fetchUsers().then(({ data }) => setUsers(data));
   }, []);
-  const history = useHistory();
+
   return (
     <>
       {users ? (

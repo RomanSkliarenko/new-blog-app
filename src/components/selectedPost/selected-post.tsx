@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import commentsOperations from '../../redux/comments/comments-operations';
 import postsOperations from '../../redux/posts/post-operations';
@@ -12,10 +12,6 @@ import IComment from '../../common/Comment.interface';
 import { useAppSelector } from '../../redux/store';
 import IPostFields from '../../common/PostFields.interface';
 
-interface IId {
-  id: string;
-}
-
 export default function SelectedPost() {
   const history = useHistory(); // for back btn
   const [newCommentInputFlag, setNewCommentInputFlag] = useState(false);
@@ -24,9 +20,10 @@ export default function SelectedPost() {
   const [currentPost, setCurrentPost] = useState<IPost>();
   const [currentPostComments, setCurrentPostComments] = useState<
     IComment[] | null
-  >();
+  >(null);
+
   const _id = useAppSelector(state => state.currentUser.user?._id); // current user
-  const { id } = useParams<IId>();
+  const { id } = useParams<{ id: string }>();
 
   const getCurrentPost = () => {
     postsOperations.getSelectedPost(id).then(data => setCurrentPost(data));
@@ -48,6 +45,7 @@ export default function SelectedPost() {
     _id
       ? setNewCommentInputFlag(!newCommentInputFlag)
       : toast(`Login first, please!`);
+
   const setPostLike = () =>
     _id
       ? postsOperations.setPostLike(id).then(() => getCurrentPost())
@@ -60,6 +58,18 @@ export default function SelectedPost() {
       getCurrentPostComments();
     });
   };
+
+  const newCommentInputHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setNewCommentInput(event.target.value);
+    },
+    [],
+  );
+
+  const newPostBackDrophandler = () => {
+    setNewPostBackdrop(!newPostBackdrop);
+  };
+
   useEffect(() => {
     getCurrentPostComments();
     getCurrentPost();
@@ -82,7 +92,7 @@ export default function SelectedPost() {
             <button
               className={style.sectionNavBtn}
               type="button"
-              onClick={() => addCommentHandler()}
+              onClick={addCommentHandler}
             >
               ADD COMMENT
             </button>
@@ -90,9 +100,7 @@ export default function SelectedPost() {
               <button
                 className={style.sectionNavBtn}
                 type="button"
-                onClick={() => {
-                  setNewPostBackdrop(!newPostBackdrop);
-                }}
+                onClick={newPostBackDrophandler}
               >
                 EDIT
               </button>
@@ -129,15 +137,13 @@ export default function SelectedPost() {
                   <input
                     className={style.newCommentInput}
                     type="text"
-                    onChange={event => {
-                      setNewCommentInput(event.target.value);
-                    }}
+                    onChange={newCommentInputHandler}
                     value={newCommentInput}
                   />
                   <button
                     className={style.sectionNavBtn}
                     type="button"
-                    onClick={() => addComment()}
+                    onClick={addComment}
                   >
                     SEND
                   </button>

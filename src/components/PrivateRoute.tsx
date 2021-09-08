@@ -1,10 +1,10 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, RouteChildrenProps } from 'react-router-dom';
 import { useAppSelector } from '../redux/store';
 
 interface IProps {
   redirectTo: string;
-  component: any;
+  component: React.FC<RouteChildrenProps>;
   path: string;
   exact?: boolean;
 }

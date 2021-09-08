@@ -5,14 +5,14 @@ import { newPostSchema } from '../../servises/validationSchema';
 import { IProps } from './postBackdrop.interface';
 import IPostFields from '../../common/PostFields.interface';
 
-export default function PostsBackdrop({
+const PostsBackdrop: React.FC<IProps> = ({
   setNewPostBackdrop, // set flag
   newPostBackdrop, // flag
   createNewPost,
   editPost,
   currentPost,
   editOrCreate,
-}: IProps) {
+}) => {
   const [edit, setEdit] = useState<boolean>(false);
   useEffect(() => {
     setEdit(editOrCreate); // flag for backdrop title
@@ -24,8 +24,8 @@ export default function PostsBackdrop({
   };
 
   const action = (values: IPostFields) => {
-    if (editPost) {
-      editPost(values, currentPost?._id!);
+    if (editPost && currentPost?._id) {
+      editPost(values, currentPost._id);
     }
     if (createNewPost) {
       createNewPost(values);
@@ -95,4 +95,6 @@ export default function PostsBackdrop({
       </div>
     </div>
   );
-}
+};
+
+export default PostsBackdrop;

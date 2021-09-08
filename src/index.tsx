@@ -7,12 +7,15 @@ import store from './redux/store';
 import './index.css';
 import App from './App';
 import 'modern-normalize/modern-normalize.css';
+import { ChakraProvider } from '@chakra-ui/react';
 
 ReactDOM.render(
   <Provider store={store.store}>
     <PersistGate loading={null} persistor={store.persistor}>
       <BrowserRouter>
+        {/* <ChakraProvider> */}
         <App />
+        {/* </ChakraProvider> */}
       </BrowserRouter>
     </PersistGate>
   </Provider>,
