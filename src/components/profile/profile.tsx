@@ -14,7 +14,6 @@ export default function Profile() {
   const avatarInput = useRef<HTMLInputElement>(null);
 
   const uploadAvatar = () => {
-    // upload user avatar and update currentAuthUser in redux state
     dispatch(
       usersOperations.uploadUserAvatar(
         currentAuthUser!._id,

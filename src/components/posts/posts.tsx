@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import IPost from '../../common/Post.interface';
 import IProps from '../../common/Props.interface';
 import { useAppSelector } from '../../redux/store';
+import IPostFields from '../../common/PostFields.interface';
 
 export default function Posts(props: IProps) {
   const history = useHistory();
@@ -36,11 +37,7 @@ export default function Posts(props: IProps) {
     }
   };
 
-  const createNewPost = (values: {
-    title: string;
-    fullText: string;
-    description: string;
-  }) => {
+  const createNewPost = (values: IPostFields) => {
     setNewPostBackdrop(!newPostBackdrop);
     postsOperations.createNewPost(values).then(data => setPosts(data));
     window.scrollTo({

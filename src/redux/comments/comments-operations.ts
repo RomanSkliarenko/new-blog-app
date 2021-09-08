@@ -1,60 +1,63 @@
 import commentsApi from '../../servises/comments-api';
 import { toast } from 'react-toastify';
-import { AxiosPromise } from 'axios';
+import axios, { AxiosPromise } from 'axios';
+import IComment from '../../common/Comment.interface';
 
-type Ifn = (id: string) => Promise<
-  {
-    _id: string;
-    commentedBy: string;
-    followedCommentID: string;
-    postID: string;
-    text: string;
-    dateCreated: string;
-    likes: string[];
-    __v: number;
-  }[]
->;
-type IfuncWithPropText = (id: string, text: string) => Promise<AxiosPromise>;
-
-const getAllPostComments: Ifn = async id => {
+const getAllPostComments: (id: string) => Promise<IComment[]> = async id => {
   try {
     return await commentsApi.currentPostCommentsReq(id);
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
-const setCommentLike: Ifn = async id => {
+const setCommentLike: (id: string) => Promise<AxiosPromise> = async id => {
   try {
     return await commentsApi.commentLikeReq(id);
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
-const deleteComment: Ifn = async id => {
+const deleteComment: (id: string) => Promise<AxiosPromise> = async id => {
   try {
     const data = await commentsApi.deleteCommentFromSelectedPostReq(id);
     return data;
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
-const editComment: IfuncWithPropText = async (id, text) => {
+const editComment: (id: string, text: string) => Promise<AxiosPromise> = async (
+  id,
+  text,
+) => {
   try {
     const data = await commentsApi.editSelectedPostCommentReq(id, text);
     return data;
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
-const addComment: IfuncWithPropText = async (id, text) => {
+const addComment: (id: string, text: string) => Promise<AxiosPromise> = async (
+  id,
+  text,
+) => {
   try {
     const data = await commentsApi.addCommentToSelectedPostReq(id, text);
     return data;
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
-const getPostComments: Ifn = async id => {
+const getPostComments: (id: string) => Promise<IComment[]> = async id => {
   const NO_COMMENTS_PLACEHOLDER = [
     {
       _id: '1',
@@ -73,8 +76,10 @@ const getPostComments: Ifn = async id => {
       return comments;
     }
     return NO_COMMENTS_PLACEHOLDER;
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
 

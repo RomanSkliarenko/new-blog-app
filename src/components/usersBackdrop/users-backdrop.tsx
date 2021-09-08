@@ -1,26 +1,26 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Formik, Field, Form } from 'formik';
 import usersOperations from '../../redux/users/users-operations';
 import style from './usersBackdrop.module.css';
-import IState from '../../common/State.interface';
 import { IProp, IValues } from './user-backdrop.interface';
+import { useAppSelector } from '../../redux/store';
 
 export default function UsersBackdrop({
   setEditUserFlag,
   editUserFlag,
 }: IProp) {
   const dispatch = useDispatch();
-  const currentAuthUser = useSelector((state: IState) => state.user.user);
+  const currentAuthUser = useAppSelector(state => state.currentUser.user);
   const initValues = {
-    name: currentAuthUser.name || '',
-    extra_details: currentAuthUser.extra_details || '',
-    skills: currentAuthUser.skills || '',
-    profession: currentAuthUser.profession || '',
-    details: currentAuthUser.details || '',
+    name: currentAuthUser?.name || '',
+    extra_details: currentAuthUser?.extra_details || '',
+    skills: currentAuthUser?.skills || '',
+    profession: currentAuthUser?.profession || '',
+    details: currentAuthUser?.details || '',
   };
   const onSubmit = (values: IValues) => {
-    dispatch(usersOperations.editUser(currentAuthUser._id, values));
+    dispatch(usersOperations.editUser(currentAuthUser!._id, values));
     setEditUserFlag(!editUserFlag);
   };
   return (

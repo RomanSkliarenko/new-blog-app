@@ -12,10 +12,6 @@ type IUser = {
   dateCreated: string;
 };
 
-interface IToken {
-  payload: string;
-}
-
 interface IInitialState {
   user: IUser | null;
   token: string | null;

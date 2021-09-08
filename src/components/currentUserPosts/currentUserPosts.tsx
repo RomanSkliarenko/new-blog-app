@@ -6,7 +6,8 @@ import Loader from 'react-loader-spinner';
 import style from './currentUserPosts.module.css';
 import { toast } from 'react-toastify';
 import { IProps } from './currentUserPosts.interface';
-import { IPost } from '../postsBackdrop/postBackdrop.interface';
+import IPost from '../../common/Post.interface';
+import IPostFields from '../../common/PostFields.interface';
 import { useAppSelector } from '../../redux/store';
 
 export default function CurrentUserPosts(props: IProps) {
@@ -18,11 +19,7 @@ export default function CurrentUserPosts(props: IProps) {
   const getCurrentUserPosts = () => {
     postsOperations.getCurrentUserPosts(userId!).then(res => setPosts(res));
   };
-  const createNewPost = (values: {
-    title: string;
-    fullText: string;
-    description: string;
-  }) => {
+  const createNewPost = (values: IPostFields) => {
     postsOperations
       .createNewPost(values)
       .then(data =>
@@ -103,6 +100,7 @@ export default function CurrentUserPosts(props: IProps) {
       )}
       {newPostBackdrop ? (
         <PostsBackdrop
+          editOrCreate={false}
           createNewPost={createNewPost}
           newPostBackdrop={newPostBackdrop}
           setNewPostBackdrop={setNewPostBackdrop}

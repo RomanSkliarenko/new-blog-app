@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-
 import usersOperations from '../../redux/users/users-operations';
 import style from './navigation.module.css';
 import { useAppSelector } from '../../redux/store';

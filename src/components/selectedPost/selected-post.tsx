@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import commentsOperations from '../../redux/comments/comments-operations';
 import postsOperations from '../../redux/posts/post-operations';
@@ -8,10 +7,10 @@ import PostsBackdrop from '../postsBackdrop/posts-backdrop';
 import style from './selected-post.module.css';
 import Comment from '../comment/comment';
 import { toast } from 'react-toastify';
-import IState from '../../common/State.interface';
 import IPost from '../../common/Post.interface';
 import IComment from '../../common/Comment.interface';
 import { useAppSelector } from '../../redux/store';
+import IPostFields from '../../common/PostFields.interface';
 
 interface IId {
   id: string;
@@ -37,14 +36,7 @@ export default function SelectedPost() {
       .getPostComments(id)
       .then(res => setCurrentPostComments(res));
   };
-  const editPost = (
-    values: {
-      title: string;
-      fullText: string;
-      description: string;
-    },
-    postId: string,
-  ) => {
+  const editPost = (values: IPostFields, postId: string) => {
     postsOperations
       .editPost(values, postId)
       .then(() => getCurrentPost())

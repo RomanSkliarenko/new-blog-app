@@ -24,5 +24,5 @@ export interface IProps {
     postId: string,
   ) => void;
   currentPost?: IPost;
-  editOrCreate?: boolean;
+  editOrCreate: boolean;
 }

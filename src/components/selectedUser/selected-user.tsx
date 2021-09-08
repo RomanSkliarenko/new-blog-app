@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import usersOperations from '../../redux/users/users-operations';
 import userAvatr from '../../images/user-default-avatar.png';
 import style from './selectedUser.module.css';
-import IUser from './selected-user.interface';
+import IUser from '../../common/User.interface';
 import Loader from 'react-loader-spinner';
 
 interface IId {

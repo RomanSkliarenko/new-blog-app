@@ -1,51 +1,51 @@
+import axios, { AxiosPromise } from 'axios';
 import postsApi from '../../servises/posts-api';
-import { toast } from 'react-toastify';
 import IPost from '../../common/Post.interface';
+import IPostFields from '../../common/PostFields.interface';
+import { toast } from 'react-toastify';
 
-type Ifn = (id: string) => Promise<IPost[]>;
-
-const getAllPosts = async () => {
+const getAllPosts: () => Promise<IPost[]> = async () => {
   try {
     const { data } = await postsApi.fetchAllPosts();
     return data;
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
 const getSelectedPost: (id: string) => Promise<IPost> = async id => {
   try {
     const data = await postsApi.fetchCurrentPost(id);
     return data;
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
-const editPost: (
-  values: {
-    title: string;
-    fullText: string;
-    description: string;
-  },
-  id: string,
-) => Promise<any> = async (post, id) => {
+const editPost: (values: IPostFields, id: string) => Promise<IPost> = async (
+  post,
+  id,
+) => {
   try {
     const data = await postsApi.fetchEditPost(post, id);
     return data;
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
-const createNewPost: (values: {
-  title: string;
-  fullText: string;
-  description: string;
-}) => Promise<any> = async post => {
+const createNewPost: (values: IPostFields) => Promise<IPost[]> = async post => {
   try {
     await postsApi.fetchCreateNewPost(post);
     const { data } = await postsApi.fetchAllPosts();
     return data;
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
 const deletePost: (postId: string, userId: string) => Promise<IPost[]> = async (
@@ -56,24 +56,30 @@ const deletePost: (postId: string, userId: string) => Promise<IPost[]> = async (
     await postsApi.fetchDeletePost(postId);
     const { data } = await postsApi.fetchAllPosts();
     return data.filter((post: IPost) => post.postedBy === userId);
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
-const getCurrentUserPosts: Ifn = async id => {
+const getCurrentUserPosts: (id: string) => Promise<IPost[]> = async id => {
   try {
     const { data } = await postsApi.fetchAllPosts();
     return data.filter((post: IPost) => post.postedBy === id);
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
-const setPostLike: Ifn = async id => {
+const setPostLike: (id: string) => Promise<AxiosPromise> = async id => {
   try {
     const data = await postsApi.fetchPostLike(id);
     return data;
-  } catch (error: any) {
-    toast(`${error.response.data.error[0].message}`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
   }
 };
 
