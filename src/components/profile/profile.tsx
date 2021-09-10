@@ -5,20 +5,20 @@ import UsersBackdrop from '../usersBackdrop/users-backdrop';
 import userAvatr from '../../images/user-default-avatar.png';
 import style from './profile.module.css';
 import { useAppSelector } from '../../redux/store';
+import { RouteChildrenProps } from 'react-router-dom';
 
-export default function Profile() {
+const Profile: React.FC<RouteChildrenProps> = () => {
   const dispatch = useDispatch();
   const [editUserFlag, setEditUserFlag] = useState<boolean>(false);
   const [currentUserAvatar, setCurrentUserAvatar] = useState<File | null>(null);
-  const currentAuthUser = useAppSelector(state => state.currentUser.user);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const currentAuthUser = useAppSelector(state => state.currentUser.user!); // ??????????????????
   const avatarInput = useRef<HTMLInputElement>(null);
 
   const uploadAvatar = () => {
     dispatch(
-      usersOperations.uploadUserAvatar(
-        currentAuthUser!._id,
-        currentUserAvatar!,
-      ),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      usersOperations.uploadUserAvatar(currentAuthUser._id, currentUserAvatar!), // ?????????????
     );
     setCurrentUserAvatar(null);
   };
@@ -46,7 +46,7 @@ export default function Profile() {
           className={style.sectionNavBtn}
           type="button"
           onClick={() => {
-            dispatch(usersOperations.deleteUser(currentAuthUser!));
+            dispatch(usersOperations.deleteUser(currentAuthUser));
           }}
         >
           Delete user
@@ -160,4 +160,6 @@ export default function Profile() {
       />
     </section>
   );
-}
+};
+
+export default Profile;

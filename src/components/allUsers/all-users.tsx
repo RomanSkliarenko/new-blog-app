@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { RouteChildrenProps, useHistory } from 'react-router-dom';
 import usersApi from '../../servises/users-api';
 import Loader from 'react-loader-spinner';
 import style from './allUsers.module.css';
 import IUser from '../../common/User.interface';
 
-export default function AllUsers() {
+const AllUsers: React.FC<RouteChildrenProps> = () => {
   const [users, setUsers] = useState<IUser[] | null>(null);
   const history = useHistory();
 
   useEffect(() => {
-    usersApi.fetchUsers().then(({ data }) => setUsers(data));
+    usersApi.fetchUsers().then(res => setUsers(res.data));
   }, []);
 
   return (
@@ -46,4 +46,5 @@ export default function AllUsers() {
       )}
     </>
   );
-}
+};
+export default AllUsers;

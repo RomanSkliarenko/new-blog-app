@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from 'axios';
-// import {AxiosError } from "axios";
 
 const axiosApiInstance = axios.create({
   baseURL: 'http://51.158.179.21/api/v1/',
@@ -13,10 +12,11 @@ axiosApiInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 });
 
 export const userToken = {
-  set(token: string) {
+  set(token: string): void {
     axiosApiInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
+    return undefined;
   },
-  unset() {
+  unset(): void {
     axiosApiInstance.defaults.headers.common.Authorization = ``;
   },
 };

@@ -5,7 +5,6 @@ import postsOperations from '../../redux/posts/post-operations';
 import Loader from 'react-loader-spinner';
 import style from './currentUserPosts.module.css';
 import { toast } from 'react-toastify';
-import { IProps } from './currentUserPosts.interface';
 import IPost from '../../common/Post.interface';
 import IPostFields from '../../common/PostFields.interface';
 import { useAppSelector } from '../../redux/store';
@@ -13,25 +12,30 @@ import { useAppSelector } from '../../redux/store';
 const CurrentUserPosts: React.FC<RouteChildrenProps> = props => {
   const [posts, setPosts] = useState<IPost[]>();
   const history = useHistory();
-  const [newPostBackdrop, setNewPostBackdrop] = useState(false); // flag for backdrop (open or close)
-  const userId = useAppSelector(state => state.currentUser.user?._id); // current user
+  const [newPostBackdrop, setNewPostBackdrop] = useState(false);
+
+  const userId = useAppSelector(state => state.currentUser.user?._id);
 
   const getCurrentUserPosts = () => {
-    postsOperations.getCurrentUserPosts(userId!).then(res => setPosts(res));
+    if (userId) {
+      postsOperations.getCurrentUserPosts(userId).then(res => setPosts(res));
+    }
   };
   const createNewPost = (values: IPostFields) => {
-    postsOperations
-      .createNewPost(values)
-      .then(data =>
+    postsOperations.createNewPost(values).then(data => {
+      if (data) {
         setPosts(
           data.filter((singlePost: IPost) => singlePost.postedBy === userId),
-        ),
-      );
+        );
+      }
+    });
     setNewPostBackdrop(!newPostBackdrop);
     toast(`Note added successfully`);
   };
   const deletePost = (postId: string) => {
-    postsOperations.deletePost(postId, userId!).then(data => setPosts(data));
+    if (userId) {
+      postsOperations.deletePost(postId, userId).then(data => setPosts(data));
+    }
   };
 
   useEffect(() => {
@@ -79,7 +83,7 @@ const CurrentUserPosts: React.FC<RouteChildrenProps> = props => {
                     className={style.postsItemBtn}
                     type="button"
                     onClick={() => {
-                      deletePost(post._id!);
+                      deletePost(post._id);
                     }}
                   >
                     Delete

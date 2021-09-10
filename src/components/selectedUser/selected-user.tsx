@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, RouteChildrenProps } from 'react-router-dom';
 import usersOperations from '../../redux/users/users-operations';
 import userAvatr from '../../images/user-default-avatar.png';
 import style from './selectedUser.module.css';
@@ -10,13 +10,17 @@ interface IId {
   id: string;
 }
 
-export default function SelectedUser() {
+const SelectedUser: React.FC<RouteChildrenProps> = () => {
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const { id } = useParams<IId>();
   const history = useHistory();
 
   useEffect(() => {
-    usersOperations.getSelectedUser(id).then(data => setSelectedUser(data));
+    usersOperations.getSelectedUser(id).then(data => {
+      if (data) {
+        setSelectedUser(data);
+      }
+    });
   }, []);
 
   return selectedUser ? (
@@ -66,4 +70,6 @@ export default function SelectedUser() {
       width={80}
     />
   );
-}
+};
+
+export default SelectedUser;

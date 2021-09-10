@@ -1,11 +1,12 @@
 import React from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory, RouteChildrenProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import usersOperations from '../../redux/users/users-operations';
 import style from './navigation.module.css';
 import { useAppSelector } from '../../redux/store';
 
-export default function Navigation() {
+// export default function Navigation() {
+const Navigation: React.FC<RouteChildrenProps> = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const currentUser = useAppSelector(state => state.currentUser.user);
@@ -94,4 +95,6 @@ export default function Navigation() {
       ) : null}
     </nav>
   );
-}
+};
+
+export default Navigation;

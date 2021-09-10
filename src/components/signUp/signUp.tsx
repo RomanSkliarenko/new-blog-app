@@ -1,12 +1,13 @@
 import React from 'react';
 import usersOperations from '../../redux/users/users-operations';
-import { useHistory } from 'react-router-dom';
+import { useHistory, RouteChildrenProps } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { signUpSchema } from '../../servises/validationSchema';
 import { toast } from 'react-toastify';
 import style from './signUp.module.css';
 import IValues from './signUp.interface';
 import { useAppDispatch } from '../../redux/store';
+import IUserFields from '../../common/UserFields.interface';
 
 const initValues: IValues = {
   name: '',
@@ -14,10 +15,10 @@ const initValues: IValues = {
   password: '',
 };
 
-export default function SignUp() {
+const SignUp: React.FC<RouteChildrenProps> = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
-  const signUp = (values: IValues) => {
+  const signUp = (values: IUserFields) => {
     dispatch(usersOperations.signUp(values));
     history.push('/');
     toast('User created success! :)');
@@ -63,4 +64,6 @@ export default function SignUp() {
       </Formik>
     </div>
   );
-}
+};
+
+export default SignUp;

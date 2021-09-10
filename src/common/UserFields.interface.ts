@@ -1,4 +1,4 @@
-export default interface IValues {
+export default interface IUserFields {
   name?: string;
   email: string;
   password: string;

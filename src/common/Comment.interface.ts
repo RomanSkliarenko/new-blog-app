@@ -1,10 +1,10 @@
 export default interface IComment {
-  _id?: string;
+  _id: string;
   commentedBy: string;
-  followedCommentID?: string;
+  followedCommentID: string | null;
   postID: string;
   text: string;
-  dateCreated?: string;
+  dateCreated: string;
   likes: string[];
-  __v?: number;
+  __v: number;
 }

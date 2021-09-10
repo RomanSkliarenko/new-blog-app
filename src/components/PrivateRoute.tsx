@@ -9,12 +9,12 @@ interface IProps {
   exact?: boolean;
 }
 
-const PrivateRoute = ({
+const PrivateRoute: (props: IProps) => JSX.Element = ({
   component: Component,
   redirectTo,
   ...routeProps
 }: IProps) => {
-  const token = useAppSelector(state => state.currentUser.token); // current user
+  const token = useAppSelector(state => state.currentUser.token);
 
   return (
     <Route

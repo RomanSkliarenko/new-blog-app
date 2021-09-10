@@ -1,9 +1,10 @@
-import React from "react";
+import React from 'react';
+import { RouteChildrenProps } from 'react-router-dom';
 
-export default function NotFound() {
-  return (
-    <div>
-      <h2>Not found page</h2>
-    </div>
-  );
-}
+const NotFound: React.FC<RouteChildrenProps> = () => (
+  <div>
+    <h2>Not found page</h2>
+  </div>
+);
+
+export default NotFound;

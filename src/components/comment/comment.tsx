@@ -4,12 +4,12 @@ import commentsOperations from '../../redux/comments/comments-operations';
 import { Props } from './comments.interface';
 import { toast } from 'react-toastify';
 
-export default function Comment({
+const Comment: React.FC<Props> = ({
   sigleComment,
   userId,
   getCurrentPostComments,
   authUser,
-}: Props) {
+}: Props) => {
   const [editCommentInputFlag, setEditCommentInputFlag] = useState(false);
   const [editCommentInput, setEditCommentInput] = useState('');
   const { text, _id: commentId, likes, commentedBy } = sigleComment;
@@ -42,7 +42,7 @@ export default function Comment({
           <button
             type="button"
             className={style.likeButton}
-            onClick={() => setCommentLike(commentId!)}
+            onClick={() => setCommentLike(commentId)}
           >
             💔
           </button>
@@ -53,7 +53,7 @@ export default function Comment({
           <button
             className={style.sectionNavBtn}
             type="button"
-            onClick={() => deleteComment(commentId!)}
+            onClick={() => deleteComment(commentId)}
           >
             DELETE
           </button>
@@ -68,7 +68,7 @@ export default function Comment({
               <button
                 className={style.sectionNavBtn}
                 type="button"
-                onClick={() => editComment(commentId!, editCommentInput)}
+                onClick={() => editComment(commentId, editCommentInput)}
               >
                 EDIT
               </button>
@@ -88,4 +88,6 @@ export default function Comment({
       ) : null}
     </li>
   );
-}
+};
+
+export default Comment;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, RouteChildrenProps } from 'react-router-dom';
 import commentsOperations from '../../redux/comments/comments-operations';
 import postsOperations from '../../redux/posts/post-operations';
 import Loader from 'react-loader-spinner';
@@ -12,21 +12,25 @@ import IComment from '../../common/Comment.interface';
 import { useAppSelector } from '../../redux/store';
 import IPostFields from '../../common/PostFields.interface';
 
-export default function SelectedPost() {
-  const history = useHistory(); // for back btn
+const SelectedPost: React.FC<RouteChildrenProps> = () => {
+  const history = useHistory();
   const [newCommentInputFlag, setNewCommentInputFlag] = useState(false);
   const [newCommentInput, setNewCommentInput] = useState('');
-  const [newPostBackdrop, setNewPostBackdrop] = useState(false); // flag for backdrop (open or close)
-  const [currentPost, setCurrentPost] = useState<IPost>();
+  const [newPostBackdrop, setNewPostBackdrop] = useState(false);
+  const [currentPost, setCurrentPost] = useState<IPost | null>(null);
   const [currentPostComments, setCurrentPostComments] = useState<
-    IComment[] | null
+    IComment[] | null | undefined
   >(null);
 
-  const _id = useAppSelector(state => state.currentUser.user?._id); // current user
+  const _id = useAppSelector(state => state.currentUser.user?._id);
   const { id } = useParams<{ id: string }>();
 
   const getCurrentPost = () => {
-    postsOperations.getSelectedPost(id).then(data => setCurrentPost(data));
+    postsOperations.getSelectedPost(id).then(data => {
+      if (data) {
+        setCurrentPost(data);
+      }
+    });
   };
   const getCurrentPostComments = () => {
     commentsOperations
@@ -174,7 +178,8 @@ export default function SelectedPost() {
       )}
       {newPostBackdrop ? (
         <PostsBackdrop
-          currentPost={currentPost}
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          currentPost={currentPost!} // ???????????????
           editPost={editPost}
           newPostBackdrop={newPostBackdrop}
           setNewPostBackdrop={setNewPostBackdrop}
@@ -183,4 +188,6 @@ export default function SelectedPost() {
       ) : null}
     </>
   );
-}
+};
+
+export default SelectedPost;

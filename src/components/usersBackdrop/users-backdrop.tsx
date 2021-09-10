@@ -6,12 +6,10 @@ import style from './usersBackdrop.module.css';
 import { IProp, IValues } from './user-backdrop.interface';
 import { useAppSelector } from '../../redux/store';
 
-export default function UsersBackdrop({
-  setEditUserFlag,
-  editUserFlag,
-}: IProp) {
+const UsersBackdrop: React.FC<IProp> = ({ setEditUserFlag, editUserFlag }) => {
   const dispatch = useDispatch();
-  const currentAuthUser = useAppSelector(state => state.currentUser.user);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const currentAuthUser = useAppSelector(state => state.currentUser.user!); // ????????????????
   const initValues = {
     name: currentAuthUser?.name || '',
     extra_details: currentAuthUser?.extra_details || '',
@@ -20,7 +18,7 @@ export default function UsersBackdrop({
     details: currentAuthUser?.details || '',
   };
   const onSubmit = (values: IValues) => {
-    dispatch(usersOperations.editUser(currentAuthUser!._id, values));
+    dispatch(usersOperations.editUser(currentAuthUser._id, values));
     setEditUserFlag(!editUserFlag);
   };
   return (
@@ -76,4 +74,6 @@ export default function UsersBackdrop({
       </div>
     </div>
   );
-}
+};
+
+export default UsersBackdrop;

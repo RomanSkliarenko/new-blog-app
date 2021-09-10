@@ -5,37 +5,39 @@ import { setCurrentAuthUser, setUserToken } from './users.reducer';
 import { toast } from 'react-toastify';
 import IUser from '../../common/User.interface';
 import axios from 'axios';
+import IUserFields from '../../common/UserFields.interface';
 
-type IAuthFn = (user: {
-  email: string;
-  password: string;
-}) => (dispatch: AppDispatch) => void;
+type Nothing = undefined;
 
-const login: IAuthFn = user => async dispatch => {
-  try {
-    const { token } = await usersApi.fetchLogin(user);
-    dispatch(setUserToken(token));
-    localStorage.setItem('token', token);
-    userToken.set(token);
-    const data = await usersApi.fetchCurrentAuthUser();
-    dispatch(setCurrentAuthUser(data));
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      toast(`${error?.response?.data.error[0].message}`);
+const login =
+  (user: IUserFields) =>
+  async (dispatch: AppDispatch): Promise<Nothing> => {
+    try {
+      const { token } = await usersApi.fetchLogin(user);
+      dispatch(setUserToken(token));
+      localStorage.setItem('token', token);
+      userToken.set(token);
+      const data = await usersApi.fetchCurrentAuthUser();
+      dispatch(setCurrentAuthUser(data));
+      return undefined;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast(`${error?.response?.data.error[0].message}`);
+      }
     }
-  }
-};
-const signUp: IAuthFn = user => async dispatch => {
-  try {
-    await usersApi.fetchSignUp(user);
-    dispatch(login(user));
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      toast(`${error?.response?.data.error[0].message}`);
+  };
+const signUp: (user: IUserFields) => (dispatch: AppDispatch) => void =
+  user => async dispatch => {
+    try {
+      await usersApi.fetchSignUp(user);
+      dispatch(login(user));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast(`${error?.response?.data.error[0].message}`);
+      }
     }
-  }
-};
-const getAuthUser: () => Promise<IUser> = async () => {
+  };
+const getAuthUser: () => Promise<IUser | Nothing> = async () => {
   try {
     const data = await usersApi.fetchCurrentAuthUser();
     setCurrentAuthUser(data);
@@ -46,7 +48,7 @@ const getAuthUser: () => Promise<IUser> = async () => {
     }
   }
 };
-const getSelectedUser: (id: string) => Promise<IUser> = async id => {
+const getSelectedUser: (id: string) => Promise<IUser | Nothing> = async id => {
   try {
     const data = await usersApi.fetchSelectedUser(id);
     return data;
@@ -67,7 +69,7 @@ const deleteUser: (user: IUser) => (dispatch: AppDispatch) => void =
     const confirm = prompt(`type YES if you want delete user ${user?.name} `); // eslint-disable-line no-alert
     if (confirm === 'YES' || confirm === 'Yes' || confirm === 'yes') {
       try {
-        await usersApi.fetchDeleteAuthUser(user._id!);
+        await usersApi.fetchDeleteAuthUser(user._id);
         userToken.unset();
         localStorage.removeItem('token');
         dispatch(setCurrentAuthUser(null));
@@ -84,8 +86,7 @@ const uploadUserAvatar: (
   avatar: File,
 ) => (dispatch: AppDispatch) => void = (id, avatar) => async dispatch => {
   try {
-    await usersApi.fetchAddUserAvatar(id, avatar);
-    const data = await usersApi.fetchSelectedUser(id);
+    const data = await usersApi.fetchAddUserAvatar(id, avatar);
     dispatch(setCurrentAuthUser(data));
   } catch (error) {
     if (axios.isAxiosError(error)) {

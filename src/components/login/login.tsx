@@ -10,8 +10,7 @@ const initialValues = {
   email: '',
   password: '',
 };
-
-export default function Login() {
+const Login: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -55,4 +54,6 @@ export default function Login() {
       </Formik>
     </div>
   );
-}
+};
+
+export default Login;

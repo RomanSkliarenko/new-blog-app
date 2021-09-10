@@ -1,18 +1,11 @@
 import commentsApi from '../../servises/comments-api';
 import { toast } from 'react-toastify';
-import axios, { AxiosPromise } from 'axios';
+import axios from 'axios';
 import IComment from '../../common/Comment.interface';
 
-const getAllPostComments: (id: string) => Promise<IComment[]> = async id => {
-  try {
-    return await commentsApi.currentPostCommentsReq(id);
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      toast(`${error?.response?.data.error[0].message}`);
-    }
-  }
-};
-const setCommentLike: (id: string) => Promise<AxiosPromise> = async id => {
+type Nothing = undefined;
+
+const setCommentLike: (id: string) => Promise<Nothing> = async id => {
   try {
     return await commentsApi.commentLikeReq(id);
   } catch (error) {
@@ -21,7 +14,7 @@ const setCommentLike: (id: string) => Promise<AxiosPromise> = async id => {
     }
   }
 };
-const deleteComment: (id: string) => Promise<AxiosPromise> = async id => {
+const deleteComment: (id: string) => Promise<Nothing> = async id => {
   try {
     const data = await commentsApi.deleteCommentFromSelectedPostReq(id);
     return data;
@@ -31,7 +24,7 @@ const deleteComment: (id: string) => Promise<AxiosPromise> = async id => {
     }
   }
 };
-const editComment: (id: string, text: string) => Promise<AxiosPromise> = async (
+const editComment: (id: string, text: string) => Promise<Nothing> = async (
   id,
   text,
 ) => {
@@ -44,7 +37,7 @@ const editComment: (id: string, text: string) => Promise<AxiosPromise> = async (
     }
   }
 };
-const addComment: (id: string, text: string) => Promise<AxiosPromise> = async (
+const addComment: (id: string, text: string) => Promise<Nothing> = async (
   id,
   text,
 ) => {
@@ -57,7 +50,10 @@ const addComment: (id: string, text: string) => Promise<AxiosPromise> = async (
     }
   }
 };
-const getPostComments: (id: string) => Promise<IComment[]> = async id => {
+
+const getPostComments = async (
+  id: string,
+): Promise<Array<IComment> | Nothing> => {
   const NO_COMMENTS_PLACEHOLDER = [
     {
       _id: '1',
@@ -86,7 +82,6 @@ const getPostComments: (id: string) => Promise<IComment[]> = async id => {
 const commentsOperations = {
   getPostComments,
   setCommentLike,
-  getAllPostComments,
   deleteComment,
   editComment,
   addComment,

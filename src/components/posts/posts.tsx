@@ -9,17 +9,20 @@ import IPost from '../../common/Post.interface';
 import IProps from '../../common/Props.interface';
 import { useAppSelector } from '../../redux/store';
 import IPostFields from '../../common/PostFields.interface';
-import { Button } from '@chakra-ui/react';
 
-export default function Posts(props: IProps) {
+const Posts: React.FC<IProps> = props => {
   const history = useHistory();
   const [posts, setPosts] = useState<IPost[] | null>(null);
-  const [newPostBackdrop, setNewPostBackdrop] = useState(false); // flag for backdrop (open or close)
+  const [newPostBackdrop, setNewPostBackdrop] = useState(false);
   const currentAuthUser = useAppSelector(state => state.currentUser.user);
   const token = useAppSelector(state => state.currentUser.token);
 
   useEffect(() => {
-    postsOperations.getAllPosts().then(data => setPosts(data));
+    postsOperations.getAllPosts().then(data => {
+      if (data) {
+        setPosts(data);
+      }
+    });
   }, []);
   const addPostHandler = () => {
     if (token) {
@@ -40,7 +43,11 @@ export default function Posts(props: IProps) {
 
   const createNewPost = (values: IPostFields) => {
     setNewPostBackdrop(!newPostBackdrop);
-    postsOperations.createNewPost(values).then(data => setPosts(data));
+    postsOperations.createNewPost(values).then(data => {
+      if (data) {
+        setPosts(data);
+      }
+    });
     window.scrollTo({
       top: 1000,
       behavior: 'smooth',
@@ -74,7 +81,7 @@ export default function Posts(props: IProps) {
               <li
                 key={post._id}
                 className={
-                  post.postedBy !== currentAuthUser!._id
+                  post.postedBy !== currentAuthUser?._id
                     ? style.postsItem
                     : `${style.currentUserPostsItem} ${style.postsItem}`
                 }
@@ -112,4 +119,5 @@ export default function Posts(props: IProps) {
       ) : null}
     </>
   );
-}
+};
+export default Posts;
