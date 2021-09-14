@@ -10,12 +10,15 @@ const initialValues = {
   email: '',
   password: '',
 };
+
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
   const onSubmitHandler = (user: { email: string; password: string }) => {
+    // what if error ?
     dispatch(usersOperations.login(user));
+
     history.push('/');
   };
 

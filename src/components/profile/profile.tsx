@@ -11,16 +11,31 @@ const Profile: React.FC<RouteChildrenProps> = () => {
   const dispatch = useDispatch();
   const [editUserFlag, setEditUserFlag] = useState<boolean>(false);
   const [currentUserAvatar, setCurrentUserAvatar] = useState<File | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const currentAuthUser = useAppSelector(state => state.currentUser.user!); // ??????????????????
+  const currentAuthUser = useAppSelector(state => state.currentUser.user);
   const avatarInput = useRef<HTMLInputElement>(null);
 
   const uploadAvatar = () => {
-    dispatch(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      usersOperations.uploadUserAvatar(currentAuthUser._id, currentUserAvatar!), // ?????????????
-    );
+    if (currentAuthUser && currentUserAvatar) {
+      dispatch(
+        usersOperations.uploadUserAvatar(
+          currentAuthUser._id,
+          currentUserAvatar,
+        ),
+      );
+    }
     setCurrentUserAvatar(null);
+  };
+
+  const deleteUserHandler = () => {
+    if (currentAuthUser) {
+      dispatch(usersOperations.deleteUser(currentAuthUser));
+    }
+  };
+
+  const changeAvatarHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setCurrentUserAvatar(event.target.files[0]);
+    }
   };
 
   return (
@@ -45,9 +60,7 @@ const Profile: React.FC<RouteChildrenProps> = () => {
         <button
           className={style.sectionNavBtn}
           type="button"
-          onClick={() => {
-            dispatch(usersOperations.deleteUser(currentAuthUser));
-          }}
+          onClick={deleteUserHandler}
         >
           Delete user
         </button>
@@ -60,15 +73,15 @@ const Profile: React.FC<RouteChildrenProps> = () => {
         >
           {currentUserAvatar ? 'Add avatar' : 'Change Avatar'}
         </button>
-        {currentUserAvatar ? (
+        {currentUserAvatar && (
           <button
             className={style.sectionNavBtn}
             type="button"
-            onClick={() => uploadAvatar()}
+            onClick={uploadAvatar}
           >
             Upload
           </button>
-        ) : null}
+        )}
       </div>
       <div className={style.userDetailsWrapper}>
         <ul>
@@ -152,11 +165,12 @@ const Profile: React.FC<RouteChildrenProps> = () => {
         ref={avatarInput}
         style={{ display: 'none' }}
         type="file"
-        onChange={event =>
-          event.target.files
-            ? setCurrentUserAvatar(event.target.files[0])
-            : null
-        }
+        onChange={changeAvatarHandler}
+        // onChange={event =>
+        //   event.target.files
+        //     ? setCurrentUserAvatar(event.target.files[0])
+        //     : null
+        // }
       />
     </section>
   );

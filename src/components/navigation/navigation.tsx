@@ -5,11 +5,25 @@ import usersOperations from '../../redux/users/users-operations';
 import style from './navigation.module.css';
 import { useAppSelector } from '../../redux/store';
 
-// export default function Navigation() {
+const ROUTES: Array<{
+  path: string;
+  authRoute: boolean;
+}> = [
+  {
+    path: '/',
+    authRoute: false,
+  },
+];
+
 const Navigation: React.FC<RouteChildrenProps> = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const currentUser = useAppSelector(state => state.currentUser.user);
+
+  const logoutHandler = () => {
+    dispatch(usersOperations.logout());
+    history.push('/');
+  };
 
   return (
     <nav className={style.navContainer}>
@@ -41,7 +55,7 @@ const Navigation: React.FC<RouteChildrenProps> = () => {
       >
         ALL USERS
       </NavLink>
-      {currentUser?.name ? null : (
+      {currentUser ? null : (
         <NavLink
           exact
           className={style.base}
@@ -53,7 +67,7 @@ const Navigation: React.FC<RouteChildrenProps> = () => {
           SIGNUP
         </NavLink>
       )}
-      {currentUser?.name ? null : (
+      {currentUser ? null : (
         <NavLink
           exact
           className={style.base}
@@ -65,7 +79,7 @@ const Navigation: React.FC<RouteChildrenProps> = () => {
           LOGIN
         </NavLink>
       )}
-      {currentUser?.name ? (
+      {currentUser ? (
         <NavLink
           exact
           className={style.base}
@@ -78,16 +92,13 @@ const Navigation: React.FC<RouteChildrenProps> = () => {
         </NavLink>
       ) : null}
 
-      {currentUser?.name ? (
+      {currentUser ? (
         <div className={style.logoutContainer}>
-          <h2 className={style.userName}>Hello, {currentUser?.name}!</h2>
+          <h2 className={style.userName}>Hello, {currentUser.name}!</h2>
           <button
             className={style.logoutBtn}
             type="button"
-            onClick={() => {
-              dispatch(usersOperations.logout());
-              history.push('/');
-            }}
+            onClick={logoutHandler}
           >
             LogOut
           </button>

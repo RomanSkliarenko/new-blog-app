@@ -4,6 +4,8 @@ import commentsOperations from '../../redux/comments/comments-operations';
 import { Props } from './comments.interface';
 import { toast } from 'react-toastify';
 
+const BALVANKA = '1';
+
 const Comment: React.FC<Props> = ({
   sigleComment,
   userId,
@@ -14,46 +16,55 @@ const Comment: React.FC<Props> = ({
   const [editCommentInput, setEditCommentInput] = useState('');
   const { text, _id: commentId, likes, commentedBy } = sigleComment;
 
-  const setCommentLike = (id: string) =>
-    authUser
-      ? commentsOperations
-          .setCommentLike(id)
-          .then(() => getCurrentPostComments())
-      : toast(`Login first, please!`);
-  const deleteComment = (id: string) => {
-    commentsOperations.deleteComment(id).then(() => getCurrentPostComments());
+  const setCommentLike = () => {
+    if (authUser) {
+      return commentsOperations
+        .setCommentLike(commentId)
+        .then(() => getCurrentPostComments());
+    }
+    toast(`Login first, please!`);
   };
-  const editComment = (id: string, commentText: string) => {
+
+  const deleteComment = () => {
+    commentsOperations
+      .deleteComment(commentId)
+      .then(() => getCurrentPostComments());
+  };
+  const editComment = () => {
     setEditCommentInputFlag(!editCommentInputFlag);
     return editCommentInput !== ''
       ? commentsOperations
-          .editComment(id, commentText)
+          .editComment(commentId, editCommentInput)
           .then(() => getCurrentPostComments())
       : toast(`Edit field must have any value!`);
   };
+  const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditCommentInput(event.target.value);
+  };
+  const inputFlagHandler = () => setEditCommentInputFlag(!editCommentInputFlag);
 
   return (
     <li>
       {text}
-      {commentId === '1' ? null : (
+      {commentId === BALVANKA && (
         <>
           <span className={style.itemTitle}> | Likes: </span>
           {likes.length}
           <button
             type="button"
             className={style.likeButton}
-            onClick={() => setCommentLike(commentId)}
+            onClick={setCommentLike}
           >
             💔
           </button>
         </>
       )}
-      {userId && commentedBy === userId ? (
+      {commentedBy === userId ? (
         <>
           <button
             className={style.sectionNavBtn}
             type="button"
-            onClick={() => deleteComment(commentId)}
+            onClick={deleteComment}
           >
             DELETE
           </button>
@@ -63,23 +74,21 @@ const Comment: React.FC<Props> = ({
                 className={style.newCommentInput}
                 type="text"
                 value={editCommentInput}
-                onChange={e => setEditCommentInput(e.target.value)}
+                onChange={changeInputHandler}
               />
               <button
                 className={style.sectionNavBtn}
                 type="button"
-                onClick={() => editComment(commentId, editCommentInput)}
+                onClick={editComment}
               >
-                EDIT
+                SUBMIT
               </button>
             </>
           ) : (
             <button
               className={style.sectionNavBtn}
               type="button"
-              onClick={() => {
-                setEditCommentInputFlag(!editCommentInputFlag);
-              }}
+              onClick={inputFlagHandler}
             >
               EDIT
             </button>

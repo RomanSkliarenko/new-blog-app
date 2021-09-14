@@ -12,6 +12,7 @@ export interface IPost {
 }
 
 export interface IProps {
+  isOpen?: boolean;
   setNewPostBackdrop: React.Dispatch<React.SetStateAction<boolean>>;
   newPostBackdrop: boolean;
   createNewPost?: (values: {

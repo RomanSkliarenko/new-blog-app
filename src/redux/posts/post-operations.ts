@@ -64,6 +64,19 @@ const deletePost = async (
     }
   }
 };
+const deletePostFromAll = async (
+  postId: string,
+): Promise<IPost[] | Nothing> => {
+  try {
+    await postsApi.fetchDeletePost(postId);
+    const { data } = await postsApi.fetchAllPosts();
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      toast(`${error?.response?.data.error[0].message}`);
+    }
+  }
+};
 const getCurrentUserPosts = async (id: string): Promise<IPost[] | Nothing> => {
   try {
     const { data } = await postsApi.fetchAllPosts();
@@ -94,5 +107,6 @@ const postsOperations = {
   deletePost,
   getCurrentUserPosts,
   setPostLike,
+  deletePostFromAll,
 };
 export default postsOperations;

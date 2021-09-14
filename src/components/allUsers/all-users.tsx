@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { RouteChildrenProps, useHistory } from 'react-router-dom';
 import usersApi from '../../servises/users-api';
-import Loader from 'react-loader-spinner';
 import style from './allUsers.module.css';
 import IUser from '../../common/User.interface';
+import Spinner from '../spinner/spinner';
+import UserList from '../userList/userList';
 
-const AllUsers: React.FC<RouteChildrenProps> = () => {
-  const [users, setUsers] = useState<IUser[] | null>(null);
-  const history = useHistory();
+const AllUsers: React.FC = () => {
+  const [users, setUsers] = useState<IUser[]>([]);
 
   useEffect(() => {
     usersApi.fetchUsers().then(res => setUsers(res.data));
@@ -15,34 +14,13 @@ const AllUsers: React.FC<RouteChildrenProps> = () => {
 
   return (
     <>
-      {users ? (
+      {users.length ? (
         <section className={style.usersContainer}>
           <h2 className={style.pageTitle}>All Users page</h2>
-          <ul className={style.usersList}>
-            {users?.map((user: IUser) => (
-              <li key={user._id} className={style.usersListItem}>
-                <span className={style.userName}>{user.name}</span>
-                <button
-                  className={style.itemBtn}
-                  type="button"
-                  onClick={() => {
-                    history.push(`/all-users/${user._id}`);
-                  }}
-                >
-                  details
-                </button>
-              </li>
-            ))}
-          </ul>
+          <UserList users={users} />
         </section>
       ) : (
-        <Loader
-          className="spinner"
-          type="BallTriangle"
-          color="#7f0000"
-          height={80}
-          width={80}
-        />
+        <Spinner />
       )}
     </>
   );

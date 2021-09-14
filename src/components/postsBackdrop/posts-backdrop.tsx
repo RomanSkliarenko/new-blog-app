@@ -5,23 +5,28 @@ import { newPostSchema } from '../../servises/validationSchema';
 import { IProps } from './postBackdrop.interface';
 import IPostFields from '../../common/PostFields.interface';
 
+// eslint-disable-next-line no-shadow
+enum Label {
+  Edit = 'EDIT',
+  Submit = 'SUBMIT',
+}
+
 const PostsBackdrop: React.FC<IProps> = ({
-  setNewPostBackdrop, // set flag
-  newPostBackdrop, // flag
+  isOpen,
+  setNewPostBackdrop,
+  newPostBackdrop,
   createNewPost,
   editPost,
   currentPost,
   editOrCreate,
 }) => {
+  if (!isOpen) return null;
+
   const [edit, setEdit] = useState<boolean>(false);
+
   useEffect(() => {
-    setEdit(editOrCreate); // flag for backdrop title
+    setEdit(editOrCreate);
   }, []);
-  const initValues = {
-    title: currentPost?.title || '',
-    fullText: currentPost?.fullText || '',
-    description: currentPost?.description || '',
-  };
 
   const action = (values: IPostFields) => {
     if (editPost && currentPost?._id) {
@@ -31,6 +36,13 @@ const PostsBackdrop: React.FC<IProps> = ({
       createNewPost(values);
     }
   };
+  const newPostBackdropHandler = () => setNewPostBackdrop(!newPostBackdrop);
+
+  const initValues = {
+    title: currentPost?.title || '',
+    fullText: currentPost?.fullText || '',
+    description: currentPost?.description || '',
+  };
 
   return (
     <div className={style.backdrop}>
@@ -38,7 +50,7 @@ const PostsBackdrop: React.FC<IProps> = ({
         <button
           className={style.backdropCloseBtn}
           type="button"
-          onClick={() => setNewPostBackdrop(!newPostBackdrop)}
+          onClick={newPostBackdropHandler}
         >
           x
         </button>
@@ -88,7 +100,7 @@ const PostsBackdrop: React.FC<IProps> = ({
               placeholder="Post description"
             />
             <button type="submit" className={style.backdropFormAddBtn}>
-              {edit ? 'EDIT' : 'ADD POST'}
+              {edit ? Label.Edit : Label.Submit}
             </button>
           </Form>
         </Formik>

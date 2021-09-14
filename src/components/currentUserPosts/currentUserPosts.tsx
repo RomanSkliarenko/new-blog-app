@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { RouteChildrenProps, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import PostsBackdrop from '../postsBackdrop/posts-backdrop';
 import postsOperations from '../../redux/posts/post-operations';
-import Loader from 'react-loader-spinner';
 import style from './currentUserPosts.module.css';
 import { toast } from 'react-toastify';
 import IPost from '../../common/Post.interface';
 import IPostFields from '../../common/PostFields.interface';
 import { useAppSelector } from '../../redux/store';
+import Spinner from '../spinner/spinner';
+import CurrentUserPostsList from '../currentUserPostsList/currentUserPostsList';
 
-const CurrentUserPosts: React.FC<RouteChildrenProps> = props => {
+const CurrentUserPosts: React.FC = () => {
   const [posts, setPosts] = useState<IPost[]>();
   const history = useHistory();
   const [newPostBackdrop, setNewPostBackdrop] = useState(false);
-
   const userId = useAppSelector(state => state.currentUser.user?._id);
 
   const getCurrentUserPosts = () => {
@@ -21,6 +21,11 @@ const CurrentUserPosts: React.FC<RouteChildrenProps> = props => {
       postsOperations.getCurrentUserPosts(userId).then(res => setPosts(res));
     }
   };
+
+  useEffect(() => {
+    getCurrentUserPosts();
+  }, []);
+
   const createNewPost = (values: IPostFields) => {
     postsOperations.createNewPost(values).then(data => {
       if (data) {
@@ -29,18 +34,21 @@ const CurrentUserPosts: React.FC<RouteChildrenProps> = props => {
         );
       }
     });
+
     setNewPostBackdrop(!newPostBackdrop);
     toast(`Note added successfully`);
   };
+
+  // useCallback
   const deletePost = (postId: string) => {
     if (userId) {
       postsOperations.deletePost(postId, userId).then(data => setPosts(data));
     }
   };
 
-  useEffect(() => {
-    getCurrentUserPosts();
-  }, []);
+  const newPostBackdropHandler = () => setNewPostBackdrop(!newPostBackdrop);
+
+  const showAllPostHandler = () => history.push('/posts');
 
   return (
     <>
@@ -51,65 +59,32 @@ const CurrentUserPosts: React.FC<RouteChildrenProps> = props => {
             <button
               className={style.sectionNavBtn}
               type="button"
-              onClick={() => setNewPostBackdrop(!newPostBackdrop)}
+              onClick={newPostBackdropHandler}
             >
               ADD NEW POST
             </button>
             <button
               className={style.sectionNavBtn}
               type="button"
-              onClick={() => {
-                history.push('/posts');
-              }}
+              onClick={showAllPostHandler}
             >
               SHOW ALL POSTS
             </button>
           </div>
-          <ul className={style.postsList}>
-            {posts?.map((post: IPost) => (
-              <li key={post._id} className={style.postsItem}>
-                {post.title}
-                <div className={style.sectionNavBtnContainer}>
-                  <button
-                    className={style.postsItemBtn}
-                    type="button"
-                    onClick={() => {
-                      history.push(`${props.match?.url}/${post._id}`);
-                    }}
-                  >
-                    details
-                  </button>
-                  <button
-                    className={style.postsItemBtn}
-                    type="button"
-                    onClick={() => {
-                      deletePost(post._id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <CurrentUserPostsList posts={posts} deletePost={deletePost} />
         </section>
       ) : (
-        <Loader
-          className="spinner"
-          type="BallTriangle"
-          color="#7f0000"
-          height={80}
-          width={80}
-        />
+        <Spinner />
       )}
-      {newPostBackdrop ? (
+
+      {newPostBackdrop && (
         <PostsBackdrop
           editOrCreate={false}
           createNewPost={createNewPost}
           newPostBackdrop={newPostBackdrop}
           setNewPostBackdrop={setNewPostBackdrop}
         />
-      ) : null}
+      )}
     </>
   );
 };
