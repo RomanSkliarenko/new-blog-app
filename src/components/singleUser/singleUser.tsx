@@ -1,6 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import IUser from '../../common/User.interface';
 import style from './singleUser.module.css';
+import btnTitle from '../../common/constants/buttonTitle';
 
 interface IProps {
   user: Partial<IUser>;
@@ -18,7 +19,7 @@ const SingleUser = ({ user: { _id: userId, name } }: IProps): JSX.Element => {
         type="button"
         onClick={detailsBtnHandler}
       >
-        details
+        {btnTitle.DETAILS}
       </button>
     </li>
   );

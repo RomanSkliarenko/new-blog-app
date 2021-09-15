@@ -5,11 +5,11 @@ import usersOperations from '../../redux/users/users-operations';
 import style from './usersBackdrop.module.css';
 import { IProp, IValues } from './user-backdrop.interface';
 import { useAppSelector } from '../../redux/store';
+import btnTitle from '../../common/constants/buttonTitle';
 
 const UsersBackdrop: React.FC<IProp> = ({ setEditUserFlag, editUserFlag }) => {
   const dispatch = useDispatch();
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const currentAuthUser = useAppSelector(state => state.currentUser.user!); // ????????????????
+  const currentAuthUser = useAppSelector(state => state.currentUser.user);
   const initValues = {
     name: currentAuthUser?.name || '',
     extra_details: currentAuthUser?.extra_details || '',
@@ -18,8 +18,10 @@ const UsersBackdrop: React.FC<IProp> = ({ setEditUserFlag, editUserFlag }) => {
     details: currentAuthUser?.details || '',
   };
   const onSubmit = (values: IValues) => {
-    dispatch(usersOperations.editUser(currentAuthUser._id, values));
-    setEditUserFlag(!editUserFlag);
+    if (currentAuthUser) {
+      dispatch(usersOperations.editUser(currentAuthUser._id, values));
+      setEditUserFlag(!editUserFlag);
+    }
   };
   return (
     <div className={style.backdrop}>
@@ -29,7 +31,7 @@ const UsersBackdrop: React.FC<IProp> = ({ setEditUserFlag, editUserFlag }) => {
           type="button"
           onClick={() => setEditUserFlag(!editUserFlag)}
         >
-          x
+          {btnTitle.BACKDROP_CLOSE}
         </button>
         <h2 className={style.backdropFormTitle}>Edit your profile</h2>
         <Formik
@@ -67,7 +69,7 @@ const UsersBackdrop: React.FC<IProp> = ({ setEditUserFlag, editUserFlag }) => {
               className={style.backdropInput}
             />
             <button type="submit" className={style.backdropFormAddBtn}>
-              EDIT
+              {btnTitle.EDIT}
             </button>
           </Form>
         </Formik>

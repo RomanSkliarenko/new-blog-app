@@ -8,6 +8,7 @@ import style from './signUp.module.css';
 import IValues from './signUp.interface';
 import { useAppDispatch } from '../../redux/store';
 import IUserFields from '../../common/UserFields.interface';
+import btnTitle from '../../common/constants/buttonTitle';
 
 const initValues: IValues = {
   name: '',
@@ -18,11 +19,13 @@ const initValues: IValues = {
 const SignUp: React.FC<RouteChildrenProps> = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
+
   const signUp = (values: IUserFields) => {
     dispatch(usersOperations.signUp(values));
     history.push('/');
     toast('User created success! :)');
   };
+
   return (
     <div className={style.signUpWrapper}>
       <h2 className={style.signUpTitle}>Sign Up</h2>
@@ -58,7 +61,7 @@ const SignUp: React.FC<RouteChildrenProps> = () => {
             placeholder="**************"
           />
           <button type="submit" className={style.sectionNavBtn}>
-            Submit
+            {btnTitle.SUBMIT}
           </button>
         </Form>
       </Formik>

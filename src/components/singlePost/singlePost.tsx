@@ -1,6 +1,8 @@
 import style from './singlePosts.module.css';
 import { useHistory } from 'react-router-dom';
 import { useAppSelector } from '../../redux/store';
+import btnTitle from '../../common/constants/buttonTitle';
+import classNames from 'classnames';
 
 interface IProps {
   post: {
@@ -26,11 +28,11 @@ const SinglePost = ({ post, deletePost }: IProps): JSX.Element => {
   return (
     <li
       key={postId}
-      className={
+      className={classNames(
         postedBy !== currentAuthUser?._id
           ? style.postsItem
-          : `${style.currentUserPostsItem} ${style.postsItem}`
-      }
+          : `${style.currentUserPostsItem} ${style.postsItem}`,
+      )}
     >
       <h3 className={style.pageTitle}>{title}</h3>
       <div className={style.sectionNavBtnContainer}>
@@ -39,17 +41,17 @@ const SinglePost = ({ post, deletePost }: IProps): JSX.Element => {
           type="button"
           onClick={detailsBtnHandler}
         >
-          Details
+          {btnTitle.DETAILS}
         </button>
-        {currentAuthUser?._id === postedBy ? (
+        {currentAuthUser?._id === postedBy && (
           <button
             className={style.postsItemBtn}
             type="button"
             onClick={deletePostHandler}
           >
-            Delete
+            {btnTitle.DELETE}
           </button>
-        ) : null}
+        )}
       </div>
     </li>
   );

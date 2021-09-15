@@ -9,6 +9,8 @@ import IPostFields from '../../common/PostFields.interface';
 enum Label {
   Edit = 'EDIT',
   Submit = 'SUBMIT',
+  EditPost = 'Edit your post',
+  CreatePost = 'Create new post',
 }
 
 const PostsBackdrop: React.FC<IProps> = ({
@@ -20,13 +22,11 @@ const PostsBackdrop: React.FC<IProps> = ({
   currentPost,
   editOrCreate,
 }) => {
-  if (!isOpen) return null;
-
   const [edit, setEdit] = useState<boolean>(false);
 
   useEffect(() => {
     setEdit(editOrCreate);
-  }, []);
+  }, [editOrCreate]);
 
   const action = (values: IPostFields) => {
     if (editPost && currentPost?._id) {
@@ -44,6 +44,8 @@ const PostsBackdrop: React.FC<IProps> = ({
     description: currentPost?.description || '',
   };
 
+  if (!isOpen) return null;
+
   return (
     <div className={style.backdrop}>
       <div className={style.backdropFormWrapper}>
@@ -55,7 +57,7 @@ const PostsBackdrop: React.FC<IProps> = ({
           x
         </button>
         <h2 className={style.backdropFormTitle}>
-          {edit ? 'Edit your post' : 'Create new post'}
+          {edit ? Label.EditPost : Label.CreatePost}
         </h2>
         <Formik
           initialValues={initValues}

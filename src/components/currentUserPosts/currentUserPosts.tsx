@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PostsBackdrop from '../postsBackdrop/posts-backdrop';
 import postsOperations from '../../redux/posts/post-operations';
@@ -24,6 +24,7 @@ const CurrentUserPosts: React.FC = () => {
 
   useEffect(() => {
     getCurrentUserPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const createNewPost = (values: IPostFields) => {
@@ -40,13 +41,18 @@ const CurrentUserPosts: React.FC = () => {
   };
 
   // useCallback
-  const deletePost = (postId: string) => {
-    if (userId) {
-      postsOperations.deletePost(postId, userId).then(data => setPosts(data));
-    }
-  };
+  const deletePost = useCallback(
+    (postId: string) => {
+      if (userId) {
+        postsOperations.deletePost(postId, userId).then(data => setPosts(data));
+      }
+    },
+    [userId, setPosts],
+  );
 
-  const newPostBackdropHandler = () => setNewPostBackdrop(!newPostBackdrop);
+  const newPostBackdropHandler = () => {
+    setNewPostBackdrop(!newPostBackdrop);
+  };
 
   const showAllPostHandler = () => history.push('/posts');
 
@@ -79,6 +85,7 @@ const CurrentUserPosts: React.FC = () => {
 
       {newPostBackdrop && (
         <PostsBackdrop
+          isOpen={newPostBackdrop}
           editOrCreate={false}
           createNewPost={createNewPost}
           newPostBackdrop={newPostBackdrop}

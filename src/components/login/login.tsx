@@ -5,6 +5,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import usersOperations from '../../redux/users/users-operations';
 import style from './login.module.css';
 import { loginSchema } from '../../servises/validationSchema';
+import { toast } from 'react-toastify';
 
 const initialValues = {
   email: '',
@@ -16,10 +17,12 @@ const Login: React.FC = () => {
   const history = useHistory();
 
   const onSubmitHandler = (user: { email: string; password: string }) => {
-    // what if error ?
-    dispatch(usersOperations.login(user));
-
-    history.push('/');
+    try {
+      dispatch(usersOperations.login(user));
+      history.push('/');
+    } catch (error) {
+      toast(`Note added successfully`);
+    }
   };
 
   return (

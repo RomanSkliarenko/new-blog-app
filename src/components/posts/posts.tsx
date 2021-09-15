@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PostsBackdrop from '../postsBackdrop/posts-backdrop';
 import postsOperations from '../../redux/posts/post-operations';
@@ -38,32 +38,36 @@ const Posts: React.FC = () => {
     if (token) {
       return history.push('current-user-posts');
     }
-
     toast(`Login first, please!`);
     history.push('login');
   };
 
   const createNewPost = (values: IPostFields) => {
-    setNewPostBackdrop(!newPostBackdrop);
-    postsOperations.createNewPost(values).then(data => {
-      if (data) {
-        setPosts(data);
-      }
-    });
-
-    window.scrollTo({
-      top: 1000,
-      behavior: 'smooth',
-    });
-
-    toast(`Note added successfully`);
-  };
-
-  const deletePost = (postId: string) => {
-    if (userId) {
-      postsOperations.deletePostFromAll(postId).then(data => setPosts(data));
+    try {
+      setNewPostBackdrop(!newPostBackdrop);
+      postsOperations.createNewPost(values).then(data => {
+        if (data) {
+          setPosts(data);
+        }
+      });
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth',
+      });
+      toast(`Note added successfully`);
+    } catch (error) {
+      toast(`Error. Note wasnt add to list`);
     }
   };
+
+  const deletePost = useCallback(
+    (postId: string) => {
+      if (userId) {
+        postsOperations.deletePostFromAll(postId).then(data => setPosts(data));
+      }
+    },
+    [userId],
+  );
 
   return (
     <>

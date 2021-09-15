@@ -28,6 +28,7 @@
 
 .postList {
   margin-top: 0;
+  margin-bottom: 0;
 }
 .postTitle {
   font-size: 24px;
@@ -47,12 +48,11 @@
   list-style: none;
   font-size: 20px;
   margin: 20px 0 20px 0;
-
 }
 .listItem:first-child {
   list-style: none;
-    text-align: center;
-    text-transform: uppercase;
+  text-align: center;
+  text-transform: uppercase;
 }
 .itemTitle {
   font-weight: 500;
@@ -77,13 +77,13 @@
   cursor: pointer;
 }
 .currentUserPostsItem {
-    background-color: rgba(148, 148, 148, 0.5);
+  background-color: rgba(148, 148, 148, 0.5);
 }
 
 .postsItemBtn:hover {
-    transform: scale(1.1);
-    color: white;
-    background-color: black;
+  transform: scale(1.1);
+  color: white;
+  background-color: black;
 }
 .newCommentInput {
   border: none;

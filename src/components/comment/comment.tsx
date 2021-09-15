@@ -3,8 +3,8 @@ import style from './comment.module.css';
 import commentsOperations from '../../redux/comments/comments-operations';
 import { Props } from './comments.interface';
 import { toast } from 'react-toastify';
-
-const BALVANKA = '1';
+import NO_COMMENTS_PLACEHOLDER from '../../common/constants/initCommentsArray';
+import CommentUserInterface from './commentUserInterface';
 
 const Comment: React.FC<Props> = ({
   sigleComment,
@@ -13,7 +13,6 @@ const Comment: React.FC<Props> = ({
   authUser,
 }: Props) => {
   const [editCommentInputFlag, setEditCommentInputFlag] = useState(false);
-  const [editCommentInput, setEditCommentInput] = useState('');
   const { text, _id: commentId, likes, commentedBy } = sigleComment;
 
   const setCommentLike = () => {
@@ -25,28 +24,10 @@ const Comment: React.FC<Props> = ({
     toast(`Login first, please!`);
   };
 
-  const deleteComment = () => {
-    commentsOperations
-      .deleteComment(commentId)
-      .then(() => getCurrentPostComments());
-  };
-  const editComment = () => {
-    setEditCommentInputFlag(!editCommentInputFlag);
-    return editCommentInput !== ''
-      ? commentsOperations
-          .editComment(commentId, editCommentInput)
-          .then(() => getCurrentPostComments())
-      : toast(`Edit field must have any value!`);
-  };
-  const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditCommentInput(event.target.value);
-  };
-  const inputFlagHandler = () => setEditCommentInputFlag(!editCommentInputFlag);
-
   return (
-    <li>
+    <li className={style.listItem}>
       {text}
-      {commentId === BALVANKA && (
+      {commentId !== NO_COMMENTS_PLACEHOLDER[0]._id && (
         <>
           <span className={style.itemTitle}> | Likes: </span>
           {likes.length}
@@ -59,42 +40,14 @@ const Comment: React.FC<Props> = ({
           </button>
         </>
       )}
-      {commentedBy === userId ? (
-        <>
-          <button
-            className={style.sectionNavBtn}
-            type="button"
-            onClick={deleteComment}
-          >
-            DELETE
-          </button>
-          {editCommentInputFlag ? (
-            <>
-              <input
-                className={style.newCommentInput}
-                type="text"
-                value={editCommentInput}
-                onChange={changeInputHandler}
-              />
-              <button
-                className={style.sectionNavBtn}
-                type="button"
-                onClick={editComment}
-              >
-                SUBMIT
-              </button>
-            </>
-          ) : (
-            <button
-              className={style.sectionNavBtn}
-              type="button"
-              onClick={inputFlagHandler}
-            >
-              EDIT
-            </button>
-          )}
-        </>
-      ) : null}
+      {commentedBy === userId && (
+        <CommentUserInterface
+          commentId={commentId}
+          getCurrentPostComments={getCurrentPostComments}
+          editCommentInputFlag={editCommentInputFlag}
+          setEditCommentInputFlag={setEditCommentInputFlag}
+        />
+      )}
     </li>
   );
 };

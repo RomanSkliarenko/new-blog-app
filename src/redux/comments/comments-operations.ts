@@ -2,6 +2,7 @@ import commentsApi from '../../servises/comments-api';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import IComment from '../../common/Comment.interface';
+import NO_COMMENTS_PLACEHOLDER from '../../common/constants/initCommentsArray';
 
 type Nothing = undefined;
 
@@ -24,6 +25,7 @@ const deleteComment: (id: string) => Promise<Nothing> = async id => {
     }
   }
 };
+
 const editComment: (id: string, text: string) => Promise<Nothing> = async (
   id,
   text,
@@ -37,6 +39,7 @@ const editComment: (id: string, text: string) => Promise<Nothing> = async (
     }
   }
 };
+
 const addComment: (id: string, text: string) => Promise<Nothing> = async (
   id,
   text,
@@ -54,18 +57,6 @@ const addComment: (id: string, text: string) => Promise<Nothing> = async (
 const getPostComments = async (
   id: string,
 ): Promise<Array<IComment> | Nothing> => {
-  const NO_COMMENTS_PLACEHOLDER = [
-    {
-      _id: '1',
-      commentedBy: '1',
-      dateCreated: '1',
-      followedCommentID: null,
-      likes: [],
-      postID: '1',
-      text: 'No comments yet',
-      __v: 1,
-    },
-  ];
   try {
     const comments = await commentsApi.currentPostCommentsReq(id);
     if (comments.length) {

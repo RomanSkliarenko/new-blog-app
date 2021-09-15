@@ -45,17 +45,9 @@
   outline: none;
 }
 
-.listItem:not(:first-child) {
-  list-style: none;
+.listItem {
+  list-style-type: square;
   font-size: 20px;
-  margin: 20px 0 20px 0;
-
-}
-
-.listItem:first-child {
-  list-style: none;
-  text-align: center;
-  text-transform: uppercase;
 }
 
 .itemTitle {
