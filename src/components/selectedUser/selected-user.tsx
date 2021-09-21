@@ -6,6 +6,7 @@ import style from './selectedUser.module.css';
 import IUser from '../../common/User.interface';
 import Loader from 'react-loader-spinner';
 import btnTitle from '../../common/constants/buttonTitle';
+import Spinner from '../spinner/spinner';
 
 interface IId {
   id: string;
@@ -69,13 +70,7 @@ const SelectedUser: React.FC = () => {
       </div>
     </section>
   ) : (
-    <Loader
-      className="spinner"
-      type="BallTriangle"
-      color="#7f0000"
-      height={80}
-      width={80}
-    />
+    <Spinner />
   );
 };
 

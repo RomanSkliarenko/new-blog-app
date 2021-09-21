@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, RouteChildrenProps } from 'react-router-dom';
 import commentsOperations from '../../redux/comments/comments-operations';
 import postsOperations from '../../redux/posts/post-operations';
-import Loader from 'react-loader-spinner';
 import PostsBackdrop from '../postsBackdrop/posts-backdrop';
 import style from './selected-post.module.css';
 import Comment from '../comment/comment';
@@ -13,6 +12,7 @@ import { useAppSelector } from '../../redux/store';
 import IPostFields from '../../common/PostFields.interface';
 import SelectedPostNav from './selected-post-nav';
 import SelectedPostContentList from './selected-post-content-list';
+import Spinner from '../spinner/spinner';
 
 const SelectedPost: React.FC<RouteChildrenProps> = () => {
   const [newCommentInputFlag, setNewCommentInputFlag] = useState(false);
@@ -99,13 +99,7 @@ const SelectedPost: React.FC<RouteChildrenProps> = () => {
           </ul>
         </section>
       ) : (
-        <Loader
-          className="spinner"
-          type="BallTriangle"
-          color="#7f0000"
-          height={80}
-          width={80}
-        />
+        <Spinner />
       )}
 
       <PostsBackdrop
